@@ -7,7 +7,7 @@ class Wall:
         self.image = pg.display.get_surface()
         self.x = x
         self.y = y
-        pg.draw.rect(self.image, (0, 0, 0), [x, y, 5, 5])
+        pg.draw.rect(self.image, (0, 0, 0), [x, y, 1, 1])
 
 
 class Player:
@@ -18,8 +18,8 @@ class Player:
        # pg.draw.rect(self.image, (0, 255, 0), [100, 100, 10, 10])
 
     def draw(self):
-        pg.draw.rect(self.screen.get_surface(), self.color, self.rect)
-
+        # pg.draw.rect(self.screen.get_surface(), self.color, self.rect)
+        pass
 
 def create_maze(filename):
     image = picture.image_to_array(filename)
@@ -28,14 +28,14 @@ def create_maze(filename):
     screen.fill((255, 255, 255))
     for i in range(0, width):
         for j in range(0, height):
-            if image[j][i] == 0:
+            if image[j][i] < 70:
                 print(f"i see a wall {i}, {j}")
                 Wall(i, j)
     pg.display.flip()
     return screen
 
 def run_maze():
-    screen = create_maze("testmaze.png")
+    screen = create_maze("testmaze1.png")
     player = Player(screen, (0, 0, 255), pg.rect.Rect(10, 10, 10, 10))
     player.draw()
     pg.key.set_repeat(30, 30)
