@@ -15,9 +15,10 @@ class Player:
         self.screen = screen
         self.color = color
         self.rect = rect
+       # pg.draw.rect(self.image, (0, 255, 0), [100, 100, 10, 10])
 
     def draw(self):
-        pg.draw.rec(self.screen.get_surface(), self.color, self.rect)
+        pg.draw.rect(self.screen.get_surface(), self.color, self.rect)
 
 
 def create_maze(filename):
@@ -36,6 +37,7 @@ def create_maze(filename):
 def run_maze():
     screen = create_maze("testmaze.png")
     player = Player(screen, (0, 0, 255), pg.rect.Rect(10, 10, 10, 10))
+    player.draw()
     pg.key.set_repeat(30, 30)
     running = True
     while running:
@@ -55,6 +57,7 @@ def run_maze():
                     print('Moving up')
             if event.type == pg.QUIT:
                 running = False
+        # screen.blit(player.image, player.rect) # Makes it go nutty
         pg.display.flip()
 
 run_maze()
