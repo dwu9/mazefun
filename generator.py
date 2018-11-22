@@ -5,7 +5,7 @@ from PIL import Image
 # Credit to Wikipedia.org Maze Generation
 # 1s will represent wall 0s will represent white space
 # All positions are measured from the top left corner (0,0)
-Debug = False
+Debug = True
 
 class Chamber:
     def __init__(self, array, row, column):
@@ -24,12 +24,28 @@ class Chamber:
         if Debug:
             print("x_line " + str(x_line))
             print("y_line " + str(y_line))
-        x_gap = randint(2, self.x-2)
+
         y_gap = randint(2, self.y-2)
+        third_gap = randint(0,1)
+
         array[x_line, :] = 1
         array[:, y_line] = 1
-        array[x_line, y_gap] = 0
-        array[x_gap, y_line] = 0
+        randomizer = randint(0, 1)
+        if randomizer == 0:
+            y_gap = randint(2, self.y - 2)
+            x_gap1 = randint(2, self.x - 2)
+            x_gap2 = randint(2, self.x - 2)
+            for i in [x_gap1, x_gap2]:
+                array[i, y_line] = 0
+            array[x_line, y_gap] = 0
+        else:
+            x_gap = randint(2, self.x - 2)
+            y_gap1 = randint(2, self.y - 2)
+            y_gap2 = randint(2, self.y - 2)
+            for i in [y_gap1, y_gap2]:
+                array[x_line, i] = 0
+            array[x_gap, y_line] = 0
+
         if Debug:
             print(maze.array)
         inner_arrays = []
@@ -51,7 +67,7 @@ class Chamber:
 
 def create_maze(size):
     # Create a starting blank chamber
-    maze = np.zeros((size, size))
+    maze = np.zeros((size, size, dtype=bool))
 
 
     return maze
@@ -97,9 +113,9 @@ def create_boarder(array):
 maze = Chamber(create_maze(20), 0, 0)
 #print(maze.array)
 inner_arrays = maze.divide()
-children = recurse(inner_arrays)
-print(children)
-new_maze = combine_arrays(maze.array, children)
+# children = recurse(inner_arrays)
+# print(children)
+# new_maze = combine_arrays(maze.array, children)
 
 
 # I need you to work on this image conversion:
