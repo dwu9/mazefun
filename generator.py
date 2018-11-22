@@ -4,15 +4,16 @@ from PIL import Image
 # Basic implementation of recursive division maze generation
 # Credit to Wikipedia.org Maze Generation
 # 1s will represent wall 0s will represent white space
+# All positions are measured from the top left corner (0,0)
 Debug = True
 
 class Chamber:
-    def __init__(self, array, pos_x, pos_y):
+    def __init__(self, array, row, column):
         self.array = array
         self.x = array.shape[0]
         self.y = array.shape[1]
-        self.pos_x = pos_x
-        self.pos_y = pos_y
+        self.row = row
+        self.column = column
 
     def divide(self):
         array = self.array
@@ -27,6 +28,15 @@ class Chamber:
         array[:, y_line] = 1
         array[x_line, y_gap] = 0
         array[x_gap, y_line] = 0
+        inner_arrays = []
+        # Top left quadrant
+        inner_arrays.append(np.array(x_line - 2, y_line - 2), self.row + 1, self.column + 1)
+        # Top right quadrant
+        inner_arrays.append(np.array(x_line - 2, self.size - y_line - 2), self.row + 1, self.column + y_line + 1)
+        # Bottom left quadrant
+        inner_arrays.append(np.array(self.size - x_line - 2, y_line - 2), self.row + x_line + 1, self.pos_y + 1)
+        # Bottom right quadrant
+        inner_arrays.append(np.array(x_line - 2, y_line - 2))
 
 
 
@@ -42,11 +52,11 @@ def create_maze(size):
     return maze
 
 
-maze = Chamber(create_maze(500), 1, 1)
+maze = Chamber(create_maze(20), 0, 0)
 maze.divide()
 print(maze.array)
 # I need you to work on this image conversion:
 image = Image.fromarray(maze.array, '1')
 image.save('genmaze.png')
-image.show()
+#image.show()
 
