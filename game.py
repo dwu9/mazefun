@@ -44,12 +44,12 @@ def create_maze(filename):
                 walllist.append((i, j))
     pg.display.flip()
     print(width)
-    print(walls[0:2])
-    return screen, walllist, walls, height, width
+    print(len(walls))
+    return screen, walllist, walls
 
 
 def run_maze():
-    screen, walllist, allwalls, height, width = create_maze("testmaze1.png")
+    screen, walllist, walls = create_maze("testmaze1.png")
     player = Player(screen, pg.rect.Rect(15, 5, 5, 5))
     pg.key.set_repeat(30, 30)
     running = True
@@ -59,19 +59,6 @@ def run_maze():
                 xsize, ysize = event.dict['size'][0], event.dict['size'][1]
                 # print (xsize, ysize)
             if event.type == pg.KEYDOWN:
-                if player.rect.left in range(0, width//4):
-                    walls = allwalls[0:width//4]
-                    print(walls)
-                elif player.rect.left in range(width//4, width//2):
-                    walls = allwalls[width//4:width//2]
-                    print(walls)
-                elif player.rect.left in range(width//2, int(0.75*width)):
-                    walls = allwalls[width//2:int(0.75*width)]
-                    print(walls)
-                elif player.rect.left in range(int(0.75*width), width):
-                    walls = allwalls[int(0.75*width):width]
-                    print(walls)
-
                 if event.key == pg.K_a: # A to move left
                     player.clear()
                     player.rect.move_ip(-1, 0)
