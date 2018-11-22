@@ -5,7 +5,7 @@ from PIL import Image
 # Credit to Wikipedia.org Maze Generation
 # 1s will represent wall 0s will represent white space
 # All positions are measured from the top left corner (0,0)
-Debug = True
+Debug = False
 
 class Chamber:
     def __init__(self, array, row, column):
@@ -34,15 +34,16 @@ class Chamber:
             print(maze.array)
         inner_arrays = []
         # Top left quadrant
-        inner_arrays.append(Chamber(np.zeros((x_line - 1, y_line - 1)), self.row + 1, self.column + 1))
+        inner_arrays.append(Chamber(np.zeros((x_line, y_line)), self.row, self.column))
         # Top right quadrant
-        inner_arrays.append(Chamber(np.zeros((x_line - 1, self.y - y_line - 2)), self.row + 1, self.column + y_line + 1))
+        inner_arrays.append(Chamber(np.zeros((x_line, self.y - y_line - 1)), self.row, self.column + y_line + 1))
         # Bottom left quadrant
-        inner_arrays.append(Chamber(np.zeros((self.x - x_line - 2, y_line - 2)), self.row + x_line + 1, self.column + 1))
+        inner_arrays.append(Chamber(np.zeros((self.x - x_line, y_line)), self.row + x_line + 1, self.column))
         # Bottom right quadrant
-        inner_arrays.append(Chamber(np.zeros((y_line - 2, x_line - 2, )), self.row + x_line + 1, self.column + y_line + 1))
+        inner_arrays.append(Chamber(np.zeros((self.y - x_line - 1, self.y - y_line - 1)), self.row + x_line + 1, self.column + y_line + 1))
         if Debug:
             for i in inner_arrays:
+                print(i.row, i.column)
                 print(i.array)
         return inner_arrays
 
@@ -73,12 +74,21 @@ def recurse(arraylist):
     """
     return inner_arrays
 
-def combine_arrays:
-
+def combine_arrays(maze, inner_arrays):
+    for matrix in inner_arrays:
+        rows = matrix.x - 1
+        columns = matrix.y - 1
+        startrow = matrix.row
+        startcolumn = matrix.column
+        matrix = matrix.array
+        for i in range(startrow, startrow + rows):
+            for j in range(startcolumn, startcolumn + columns):
+                maze[i][j] = matrix[i-startrow][j-startcolumn]
+    return maze
 
 def create_boarder(array):
     # Change this to append and create a boarder
-
+    size = 0
     maze[0, :] = 1
     maze[:, 0] = 1
     maze[size, :] = 1
@@ -88,6 +98,10 @@ maze = Chamber(create_maze(20), 0, 0)
 #print(maze.array)
 inner_arrays = maze.divide()
 children = recurse(inner_arrays)
+print(children)
+new_maze = combine_arrays(maze.array, children)
+
+
 # I need you to work on this image conversion:
 #image = Image.fromarray(maze.array, '1')
 #image.save('genmaze.png')
