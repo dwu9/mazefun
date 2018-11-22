@@ -44,21 +44,21 @@ def create_maze(filename):
                 walls.append(wall.rect)
                 walllist.append((i, j))
     pg.display.flip()
-    print(walllist)
+    print(width)
+    print(len(walls))
     return screen, walllist, walls
 
 
 def run_maze():
-    screen, walllist, walls = create_maze("testmazemedium.png")
+    screen, walllist, walls = create_maze("testmaze1.png")
     player = Player(screen, pg.rect.Rect(15, 5, 5, 5))
     pg.key.set_repeat(30, 30)
     running = True
-    print(type(walls[0]))
     while running:
         for event in pg.event.get():
             if event.type == pg.VIDEORESIZE:
                 xsize, ysize = event.dict['size'][0], event.dict['size'][1]
-                print (xsize, ysize)
+                # print (xsize, ysize)
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_a: # A to move left
                     player.clear()
