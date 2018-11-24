@@ -38,13 +38,13 @@ class Chamber:
         self.array = array
 
         children_list = []
-        child_1 = Chamber(np.array((row_wall, col_wall), dtype=bool), self.row_pos, self.col_pos)
-        child_2 = Chamber(np.array((row_wall, self.num_columns - col_wall), dtype=bool), self.row_pos,
-                          self.column_pos + col_wall + 1)
-        child_3 = Chamber(np.array((self.num_rows - row_wall, col_wall), dtype=bool), self.row_pos + row_wall + 1,
-                          self.column_pos)
-        child_4 = Chamber(np.array((self.num_rows - row_wall, self.num_columns - col_wall), dtype=bool),
-                          self.row_pos + row_wall + 1, self.column_pos + col_wall + 1)
+        child_1 = Chamber((np.zeros((row_wall, col_wall), dtype=bool)), self.row_pos, self.col_pos)
+        child_2 = Chamber(np.zeros((row_wall, self.num_columns - col_wall), dtype=bool), self.row_pos,
+                          self.col_pos + col_wall + 1)
+        child_3 = Chamber(np.zeros((self.num_rows - row_wall, col_wall), dtype=bool), self.row_pos + row_wall + 1,
+                          self.col_pos)
+        child_4 = Chamber(np.zeros((self.num_rows - row_wall, self.num_columns - col_wall), dtype=bool),
+                          self.row_pos + row_wall + 1, self.col_pos + col_wall + 1)
         children_list.append(child_1)
         children_list.append(child_2)
         children_list.append(child_3)
@@ -62,12 +62,12 @@ def create_maze(size):
 
 
 def split_children(children_list):
-    all_sub_children = []
+    sub_children = []
     for child in children_list:
-        sub_children = child.divide()
-        for i in sub_children:
-            all_sub_children.append(i)
-    return all_sub_children
+        sub_child = child.divide()
+        for i in sub_child:
+            sub_children.append(i)
+    return sub_children
 
 
 def recurse(arraylist):
@@ -88,15 +88,15 @@ def recurse(arraylist):
     return inner_arrays
 
 def combine_arrays(maze, inner_arrays):
-    for matrix in inner_arrays:
-        rows = matrix.x - 1
-        columns = matrix.y - 1
-        startrow = matrix.row
-        startcolumn = matrix.column
-        matrix = matrix.array
-        for i in range(startrow, startrow + rows):
-            for j in range(startcolumn, startcolumn + columns):
-                maze[i][j] = matrix[i-startrow][j-startcolumn]
+    for sub_child in inner_arrays:
+        num_rows = sub_child.num_rows
+        num_col = sub_child.num_columns
+        start_row = sub_child.row_pos
+        start_col = sub_child.col_pos
+        matrix = sub_child.array
+        for i in range(0, num_rows + 1):
+            for j in range(0, num_col + 1):
+                maze.array[i + start_row][j + start_col] = matrix[i][j]
     return maze
 
 def create_boarder(array):
@@ -109,12 +109,13 @@ def create_boarder(array):
 
 
 
-maze = Chamber(create_maze(100), 0, 0)
+maze = Chamber(create_maze(10), 0, 0)
 children = maze.divide()
 if Debug:
     print(children)
 print(maze.array)
-sub_children = split_children(children)
+# sub_children = split_children(children)
+# maze = combine_arrays(maze, sub_children)
 
 
 
@@ -123,7 +124,7 @@ pyplot.figure(figsize=(10, 10))
 pyplot.imshow(maze.array, cmap=pyplot.cm.binary, interpolation='nearest')
 pyplot.xticks([]), pyplot.yticks([])
 pyplot.show()
-#print(maze.array)
+print(maze.array)
 # inner_arrays = maze.divide()
 # children = recurse(inner_arrays)
 # print(children)
