@@ -22,8 +22,8 @@ class Chamber:
 
 
     def divide(self, maze):
-        if self.num_rows <= 1 or self.num_columns <= 1:
-            return None, None
+        if self.num_rows <= 2 or self.num_columns <= 2:
+            return maze, None
         else:
             array = self.array
             row_wall = randint(1, self.num_rows-1)
@@ -64,12 +64,15 @@ def create_maze(size):
     maze = np.zeros((size, size), dtype=bool)
     return maze
 
-
+# This function runs corretly and will split once
 def split_children(children_list, maze):
     sub_children = []
     for child in children_list:
+        # If we have one that fails maze is defined to be None and that screws
+        # up future calls of this function FIX
         maze, sub_childs = child.divide(maze)
-        if maze == None:
+        if sub_childs == None:
+            # This means that this chamber of the maze cannot be divided any further
             pass
         else:
             for i in sub_childs:
@@ -77,22 +80,24 @@ def split_children(children_list, maze):
     return maze, sub_children
 
 
-def recurse(arraylist):
-    inner_arrays = []
-    for inner_maze in arraylist:
-        if inner_maze.x > 2 and inner_maze.y > 2:
-            children = inner_maze.divide()
-            for i in children:
-                inner_arrays.append(children)
+def recurse(children_list, maze):
+    sub_children = []
+    for child in children_list:
+        maze, sub_childs = child.divide(maze)
+        if sub_childs == None:
+            pass
         else:
-            inner_arrays.append(inner_maze)
-    """
-    if inner_arrays == arraylist:
-        return arraylist
+            for i in sub_childs:
+                sub_children.append(i)
+    if len(sub_children) != 0:
+        # TODO fix recursive logic so that the returned value carries through
+        recurse(sub_children, maze)
     else:
-        recurse(inner_arrays)
-    """
-    return inner_arrays
+        print("maze is a: ")
+        print(maze)
+        print(maze.array)
+        return maze
+
 
 def combine_arrays(maze, sub_child):
     num_rows = sub_child.num_rows
@@ -115,12 +120,11 @@ def create_boarder(array):
 
 
 
-maze = Chamber(create_maze(50), 0, 0)
+maze = Chamber(create_maze(10), 0, 0)
 maze, children = maze.divide(maze)
-if Debug:
-    print(children)
-print(maze.array)
-maze, sub_children = split_children(children, maze)
+maze = recurse(children, maze)
+print(maze)
+# maze, sub_children = split_children(children, maze)
 # maze = combine_arrays(maze, sub_children)
 
 
@@ -130,5 +134,5 @@ pyplot.figure(figsize=(10, 10))
 pyplot.imshow(maze.array, cmap=pyplot.cm.binary, interpolation='nearest')
 pyplot.xticks([]), pyplot.yticks([])
 pyplot.show()
-print(maze.array)
+#print(maze.array)
 
