@@ -23,34 +23,38 @@ class Chamber:
 
     def divide(self, maze):
         # Separate these conditions
-        if self.array.shape[0] <= 2 or self.array.shape[1] <= 2:
+        if self.array.shape[0] <= 1 or self.array.shape[1] <= 1:
             return maze, None
         else:
             row_flag = True
             col_flag = True
             # Change row wall to divide in half
             array = self.array
-            #row_wall = randint(1, self.num_rows-1)
+            #row_wall = new_rand(1, self.num_rows-1)
+
             if bool(getrandbits(1)):
                 row_wall = floor((self.num_rows / 2))
             else:
                 row_wall = ceil((self.num_rows / 2))
+
             array[row_wall,:] = 1
-            #col_wall = randint(1, self.num_columns-1)
+            #col_wall = new_rand(1, self.num_columns-1)
+
             if bool(getrandbits(1)):
                 col_wall = floor((self.num_rows / 2))
             else:
                 col_wall = ceil((self.num_rows / 2))
+
             array[:, col_wall] = 1
-            row_gap1 = randint(0, col_wall - 1)
+            row_gap1 = new_rand(0, col_wall - 1)
             array[row_wall, row_gap1] = 0
-            col_gap1 = randint(0, row_wall - 1)
+            col_gap1 = new_rand(0, row_wall - 1)
             array[col_gap1, col_wall] = 0
             if bool(getrandbits(1)):
-                row_gap2 = randint(col_wall + 1, self.num_columns)
+                row_gap2 = new_rand(col_wall + 1, self.num_columns)
                 array[row_wall, row_gap2] = 0
             else:
-                col_gap2 =randint(row_wall + 1, self.num_rows)
+                col_gap2 = new_rand(row_wall + 1, self.num_rows)
                 array[col_gap2, col_wall] = 0
             self.array = array
 
@@ -71,7 +75,11 @@ class Chamber:
             return maze, children_list
 
 
-
+def new_rand(low, high):
+    try:
+        return randint(low, high)
+    except:
+        return high
 
 def create_maze(size):
     # Create a starting blank chamber
@@ -96,6 +104,7 @@ def split_children(children_list, maze):
 
 def recurse(children_list, maze):
     sub_children = []
+    draw_maze(maze)
     for child in children_list:
         maze, sub_childs = child.divide(maze)
         if sub_childs == None:
@@ -108,12 +117,8 @@ def recurse(children_list, maze):
         maze = recurse(sub_children, maze)
     else:
         print(maze.array)
-        maze = create_boarder(maze)
-        print(maze.array)
-        pyplot.figure(figsize=(10, 10))
-        pyplot.imshow(maze.array, cmap=pyplot.cm.binary, interpolation='nearest')
-        pyplot.xticks([]), pyplot.yticks([])
-        pyplot.show()
+        maze = create_border(maze)
+        draw_maze(maze)
         return maze
 
 
@@ -128,7 +133,7 @@ def combine_arrays(maze, sub_child):
             maze.array[i + start_row][j + start_col] = matrix[i][j]
     return maze
 
-def create_boarder(maze):
+def create_border(maze):
     # Change this to append and create a boarder
     array = maze.array
     maze.row_pos = 1
@@ -142,8 +147,13 @@ def create_boarder(maze):
     complete_maze = combine_arrays(complete_maze, maze)
     return complete_maze
 
+def draw_maze(maze):
+    pyplot.figure(figsize=(10, 10))
+    pyplot.imshow(maze.array, cmap=pyplot.cm.binary, interpolation='nearest')
+    pyplot.xticks([]), pyplot.yticks([])
+    pyplot.show()
 
-maze = Chamber(create_maze(50), 0, 0)
+maze = Chamber(create_maze(40), 0, 0)
 maze, children = maze.divide(maze)
 maze = recurse(children, maze)
 # maze, sub_children = split_children(children, maze)
