@@ -1,7 +1,6 @@
 
 import pygame as pg
 import picture
-import sys
 
 
 class Wall:
@@ -29,6 +28,7 @@ class Player:
 
     def clear(self):
         pg.draw.rect(self.screen, (255, 255, 255), self.rect)
+
 
 def enemy_function(enemy_object, player_object):
     player_rect = player_object.rect
@@ -64,21 +64,21 @@ def create_maze(filename):
     height, width = image.shape
     screen = pg.display.set_mode((width, height), pg.RESIZABLE)
     screen.fill((255, 255, 255))
-    walllist= []
+    wall_list= []
     walls = []
     for i in range(0, width):
         for j in range(0, height):
             if image[j][i] < 70:
                 wall = Wall(i, j, pg.Rect(i, j, 1, 1))
                 walls.append(wall.rect)
-                walllist.append((i, j))
+                wall_list.append((i, j))
     print(width)
     print(len(walls))
-    return screen, walllist, walls
+    return screen, wall_list, walls
 
 
 def run_maze():
-    screen, walllist, walls = create_maze("testmaze1.png")
+    screen, wall_list, walls = create_maze("testmaze1.png")
     player = Player(screen, (0, 0, 255), pg.rect.Rect(15, 5, 5, 5), 2)
     enemy = Player(screen, (255, 0, 0), pg.rect.Rect(10, 0, 5, 5), 1)
     pg.key.set_repeat(30, 30)
@@ -86,9 +86,9 @@ def run_maze():
     while running:
         for event in pg.event.get():
             if event.type == pg.VIDEORESIZE:
-                xsize, ysize = event.dict['size'][0], event.dict['size'][1]
-                pg.transform.scale(screen, (xsize, ysize))
-                print (xsize, ysize)
+                x_size, y_size = event.dict['size'][0], event.dict['size'][1]
+                pg.transform.scale(screen, (x_size, y_size))
+                print (x_size, y_size)
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_a: # A to move left
                     player.clear()
@@ -145,6 +145,3 @@ def run_maze():
         pg.display.flip()
 
 run_maze()
-
-
-
