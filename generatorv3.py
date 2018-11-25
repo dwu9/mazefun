@@ -1,7 +1,8 @@
 import numpy as np
-from random import randint
+from random import randint, getrandbits
 from PIL import Image
 import matplotlib.pyplot as pyplot
+from math import floor, ceil
 
 # Basic implementation of recursive division maze generation
 # Credit to Wikipedia.org Maze Generation
@@ -22,23 +23,35 @@ class Chamber:
 
     def divide(self, maze):
         # Separate these conditions
-        if self.num_rows <= 1 or self.num_columns <= 1:
+        if self.array.shape[0] <= 2 or self.array.shape[1] <= 2:
             return maze, None
         else:
+            row_flag = True
+            col_flag = True
             # Change row wall to divide in half
             array = self.array
-            row_wall = randint(1, self.num_rows-1)
+            #row_wall = randint(1, self.num_rows-1)
+            if bool(getrandbits(1)):
+                row_wall = floor((self.num_rows / 2))
+            else:
+                row_wall = ceil((self.num_rows / 2))
             array[row_wall,:] = 1
-            col_wall = randint(1, self.num_columns-1)
+            #col_wall = randint(1, self.num_columns-1)
+            if bool(getrandbits(1)):
+                col_wall = floor((self.num_rows / 2))
+            else:
+                col_wall = ceil((self.num_rows / 2))
             array[:, col_wall] = 1
             row_gap1 = randint(0, col_wall - 1)
             array[row_wall, row_gap1] = 0
-            row_gap2 = randint(col_wall + 1, self.num_columns)
-            array[row_wall, row_gap2] = 0
             col_gap1 = randint(0, row_wall - 1)
             array[col_gap1, col_wall] = 0
-            col_gap2 =randint(row_wall + 1, self.num_rows)
-            array[col_gap2, col_wall] = 0
+            if bool(getrandbits(1)):
+                row_gap2 = randint(col_wall + 1, self.num_columns)
+                array[row_wall, row_gap2] = 0
+            else:
+                col_gap2 =randint(row_wall + 1, self.num_rows)
+                array[col_gap2, col_wall] = 0
             self.array = array
 
             maze = combine_arrays(maze, self)
