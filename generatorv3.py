@@ -20,11 +20,12 @@ class Chamber:
         self.col_pos = column
 
 
-
     def divide(self, maze):
+        # Separate these conditions
         if self.num_rows <= 1 or self.num_columns <= 1:
             return maze, None
         else:
+            # Change row wall to divide in half
             array = self.array
             row_wall = randint(1, self.num_rows-1)
             array[row_wall,:] = 1
@@ -145,4 +146,3 @@ pyplot.xticks([]), pyplot.yticks([])
 pyplot.show()
 """
 #print(maze.array)
-
