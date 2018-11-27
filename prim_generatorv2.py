@@ -1,24 +1,6 @@
-def get_neighbours(point, stack):
-    global size
-    row = point[0]
-    col = point[1]
-    neighbour_list = []
-    if (not (row + 2) > (size - 1)) and ((row + 2, col) not in stack):
-        neighbour_list.append((row + 2, col))
-    if (not (col + 2) > (size - 1)) and ((row, col + 2) not in stack):
-        neighbour_list.append((row, col + 2))
-    if (not (col - 2) < 1) and ((row, col - 2) not in stack):
-        neighbour_list.append((row, col - 2))
-    if (not (row - 2) < 1) and ((row - 2, col) not in stack):
-        neighbour_list.append((row - 2, col))
-
-    return neighbour_list
-
 import numpy as np
 import random as rand
-from PIL import Image
 import matplotlib.pyplot as pyplot
-from math import floor, ceil
 
 
 def create_maze(size):
@@ -33,16 +15,20 @@ def draw_maze(maze):
     pyplot.show()
 
 
-def prim_gen(maze, frontier_list, checked_list):  # Path_list is a list of tuples (x, y)
+def release_kraken(maze, frontier_list):
     row_index = maze.shape[0] - 1
     column_index = maze.shape[1] - 1
-    if not frontier_list:  # Checks if path_list is empty
-        start_row = rand.randint(0, row_index)
-        start_column = rand.randint(0, column_index)
-    else:
-        start_row, start_column = rand.choice(frontier_list)
+    start_row = rand.randint(0, row_index)
+    start_column = rand.randint(0, column_index)
+    frontier_list.append((start_row, start_column))
+    maze[start_row][start_column] = 0
+    return maze, frontier_list
 
-    # frontier_list.append((start_row, start_column))
+
+def prim_gen(maze, frontier_list, checked_list):
+    row_index = maze.shape[0] - 1
+    column_index = maze.shape[1] - 1
+    start_row, start_column = rand.choice(frontier_list)
     top = (start_row + 1, start_column)
     bottom = (start_row - 1, start_column)
     left = (start_row, start_column - 1)
@@ -74,17 +60,12 @@ def prim_gen(maze, frontier_list, checked_list):  # Path_list is a list of tuple
 
 
 # Start with a grid full of walls.
-maze = create_maze(40)
+maze = create_maze(20)
 frontier_list = []
-wall_list = []
+maze, frontier_list = release_kraken(maze, frontier_list)
 checked_list = []
 maze, frontier_list, checked_list = prim_gen(maze, frontier_list, checked_list)
-for i in range(0, 250):
-    prim_gen(maze,frontier_list, checked_list)
+while frontier_list:
+    prim_gen(maze, frontier_list, checked_list)
 
 draw_maze(maze)
-
-
-
-
-
