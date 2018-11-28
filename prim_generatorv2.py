@@ -15,12 +15,13 @@ def draw_maze(maze):
     pyplot.show()
 
 
-def release_kraken(maze, frontier_list):
+def release_kraken(maze, frontier_list, checked_list):
     row_index = maze.shape[0] - 1
     column_index = maze.shape[1] - 1
     start_row = rand.randint(0, row_index)
     start_column = rand.randint(0, column_index)
     frontier_list.append((start_row, start_column))
+    checked_list.append((start_row, start_column))
     maze[start_row][start_column] = 0
     return maze, frontier_list
 
@@ -52,20 +53,18 @@ def prim_gen(maze, frontier_list, checked_list):
                     frontier_list.append(left)
                 if right not in frontier_list and top not in checked_list:
                     frontier_list.append(right)
-            else:
-                print('WALL!')
         # frontier_list.remove((start_row, start_column))
         checked_list.append((start_row, start_column))
-    return maze, frontier_list, checked_list
+    return maze, frontier_list, checked_list, flag
 
 
 # Start with a grid full of walls.
 maze = create_maze(20)
 frontier_list = []
-maze, frontier_list = release_kraken(maze, frontier_list)
 checked_list = []
+maze, frontier_list = release_kraken(maze, frontier_list, checked_list)
 maze, frontier_list, checked_list = prim_gen(maze, frontier_list, checked_list)
-while frontier_list:
+while something:
     prim_gen(maze, frontier_list, checked_list)
 
 draw_maze(maze)
