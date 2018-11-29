@@ -1,7 +1,6 @@
 import numpy as np
 import random as rand
 import matplotlib.pyplot as pyplot
-import sys
 
 
 def create_maze(size):
@@ -52,7 +51,6 @@ def prim_gen(maze, frontier_list, checked_list):
     diagonals = [maze[upper_left], maze[upper_right], maze[lower_left], maze[lower_right]]
     if start_row in range(1, row_index - 1):
         if start_column in range(1, column_index - 1):
-            # print(sorted(cross))
             if sorted(cross) == [0, 1, 1, 1] or sorted(cross) == [1, 1, 1, 1]:
                 if sorted(diagonals) == [0, 1, 1, 1] or sorted(diagonals) == [1, 1, 1, 1]:
                     maze[start_row][start_column] = 0
@@ -68,7 +66,7 @@ def main():
     release_kraken(maze, frontier_list, checked_list)
 
     # while checked_list != frontier_list or run == 0:
-    for i in range(0, 10000):
+    for i in range(0, 11000):
         prim_gen(maze, frontier_list, checked_list)
     maze = np.delete(maze, 29, 0)
     maze = np.delete(maze, 29, 1)
