@@ -1,8 +1,14 @@
 import numpy
 from numpy.random import random_integers as rand
-import matplotlib.pyplot as pyplot
+import matplotlib.pyplot as pp
 
-def maze(width=81, height=51, complexity=1, density=1):
+def draw_maze(maze):
+    pp.figure(figsize=(10, 10))
+    pp.imshow(maze, cmap=pp.cm.binary, interpolation='nearest')
+    pp.xticks([]), pp.yticks([])
+    pp.show()
+
+def maze(width=21, height=21, complexity=1, density=1):
     # Only odd shapes
     shape = ((height // 2) * 2 + 1, (width // 2) * 2 + 1)
     # Adjust complexity and density relative to maze size
@@ -28,10 +34,9 @@ def maze(width=81, height=51, complexity=1, density=1):
                 if Z[y_, x_] == 0:
                     Z[y_, x_] = 1
                     Z[y_ + (y - y_) // 2, x_ + (x - x_) // 2] = 1
+                    draw_maze(Z)
                     x, y = x_, y_
+
     return Z
 
-pyplot.figure(figsize=(10, 5))
-pyplot.imshow(maze(80, 40), cmap=pyplot.cm.binary, interpolation='nearest')
-pyplot.xticks([]), pyplot.yticks([])
-pyplot.show()
+maze()

@@ -5,7 +5,7 @@ import matplotlib.pyplot as pyplot
 from math import floor, ceil
 import time
 
-size = 51
+size = 49
 
 def create_maze(size):
     # Create a starting blank chamber
@@ -98,7 +98,8 @@ while cell_list:
     else:
         stack.append(next)
         cell_list.remove(next)
+draw_maze(maze)
+
 t1 = time.time()
 print("It took " + str(t1-t0) + "s")
 
-draw_maze(maze)

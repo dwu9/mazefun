@@ -4,7 +4,6 @@ from PIL import Image
 import matplotlib.pyplot as pyplot
 from math import floor, ceil
 
-gap_passages = []
 
 class Chamber:
     def __init__(self, min_row, max_row, min_col, max_col):
@@ -22,7 +21,6 @@ def orientation(chamber):
         direcction = 'H'
     elif (max_row - min_row) < (max_col - min_col):
         direction = 'V'
-
     else:
         if bool(getrandbits(1)):
             direction = 'V'
@@ -40,10 +38,11 @@ def split(chamber, maze):
     if direction == 'V':
         value = ex_rand(min_col, max_col)
         gap = in_rand(min_row, max_row)
+        draw_line(maze, direction, value, min_row, max_row, gap)
     elif direction == 'H':
         value = ex_rand(min_row, max_row)
         gap = in_rand(min_row, max_row)
-    draw_line(maze, direction, value, gap)
+        draw_line(maze, direction, value, min_col, max_col, gap)
     return maze
 
 def ex_rand(min, max):
@@ -52,14 +51,12 @@ def ex_rand(min, max):
 def in_rand(min,max):
     return randint(min, max)
 
-def draw_line(array, direction, value, gap):
-    global gap_passages
-
+def draw_line(array, direction, value, min, max, gap):
     if direction == "H":
-        array[value, :] = 1
+        array[value, min:max] = 1
         array[value, gap] = 0
     elif direction == "V":
-        array[:, value] = 1
+        array[min:max, value] = 1
         array[gap, value] = 0
     return array
 
@@ -84,7 +81,7 @@ def create_maze(size):
         direction = 'H'
     value = ex_rand(floor(0.25 * size) , ceil(0.75 * size))
     gap = in_rand(0, size - 1)
-    draw_line(maze, direction, value, gap)
+    draw_line(maze, direction, value, 0, size, gap)
     first_children = derive_first_children(direction, value, size)
     return maze, first_children
 
@@ -94,8 +91,12 @@ def draw_maze(maze):
     pyplot.xticks([]), pyplot.yticks([])
     pyplot.show()
 
+
 maze, first_children = create_maze(20)
-for i in first_children:
-    maze = split(i, maze)
+draw_maze(maze)
+
+for child in first_children:
+    print(child.min_row, child.max_row, child.min_col, child.max_col)
+    maze = split(child, maze)
 
 draw_maze(maze)
