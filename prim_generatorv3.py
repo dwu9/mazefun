@@ -57,24 +57,26 @@ def prim_gen(maze, frontier_list, checked_list):
                     for direction in [top, left, right, bottom]:
                         frontier_prep(maze, frontier_list, checked_list, direction)
         checked_list.append((start_row, start_column))
+        frontier_list.remove((start_row, start_column))
 
 
 def main():
-    maze = create_maze(30)
+    maze = create_maze(40)
     frontier_list = []
     checked_list = []
     release_kraken(maze, frontier_list, checked_list)
 
     # while checked_list != frontier_list or run == 0:
-    for i in range(0, 11000):
+    for i in range(0, 3000):
         prim_gen(maze, frontier_list, checked_list)
-    maze = np.delete(maze, 29, 0)
-    maze = np.delete(maze, 29, 1)
+    maze = np.delete(maze, 39, 0)
+    maze = np.delete(maze, 39, 1)
     maze[5][0] = 0
-    maze[25][28] = 0
+    maze[35][38] = 0
     maze[5][1] = 0
-    maze[25][27] = 0
+    maze[35][37] = 0
     draw_maze(maze)
+    print(len(frontier_list))
 
 
 main()
