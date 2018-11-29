@@ -56,14 +56,8 @@ def prim_gen(maze, frontier_list, checked_list):
             if sorted(cross) == [0, 1, 1, 1] or sorted(cross) == [1, 1, 1, 1]:
                 if sorted(diagonals) == [0, 1, 1, 1] or sorted(diagonals) == [1, 1, 1, 1]:
                     maze[start_row][start_column] = 0
-                    if top not in frontier_list and top not in checked_list and maze[top] != 0:
-                        frontier_list.append(top)
-                    if bottom not in frontier_list and bottom not in checked_list and maze[bottom] != 0:
-                        frontier_list.append(bottom)
-                    if left not in frontier_list and left not in checked_list and maze[left] != 0:
-                        frontier_list.append(left)
-                    if right not in frontier_list and right not in checked_list and maze[right] != 0:
-                        frontier_list.append(right)
+                    for direction in [top, left, right, bottom]:
+                        frontier_prep(maze, frontier_list, checked_list, direction)
         checked_list.append((start_row, start_column))
 
 
