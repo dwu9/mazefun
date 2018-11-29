@@ -1,6 +1,8 @@
 import numpy as np
 import random as rand
-import matplotlib.pyplot as pyplot
+import matplotlib.pyplot as pp
+
+maze_size = 20
 
 
 def create_maze(size):
@@ -9,10 +11,10 @@ def create_maze(size):
 
 
 def draw_maze(maze):
-    pyplot.figure(figsize=(10, 10))
-    pyplot.imshow(maze, cmap=pyplot.cm.binary, interpolation='nearest')
-    pyplot.xticks([]), pyplot.yticks([])
-    pyplot.show()
+    pp.figure(figsize=(10, 10))
+    pp.imshow(maze, cmap=pp.cm.binary, interpolation='nearest')
+    pp.xticks([]), pp.yticks([])
+    pp.show()
 
 
 def release_kraken(maze, frontier_list, checked_list):
@@ -55,28 +57,31 @@ def prim_gen(maze, frontier_list, checked_list):
                 if sorted(diagonals) == [0, 1, 1, 1] or sorted(diagonals) == [1, 1, 1, 1]:
                     maze[start_row][start_column] = 0
                     for direction in [top, left, right, bottom]:
-                        frontier_prep(maze, frontier_list, checked_list, direction)
+                        if direction[0] != 0 and direction[0] != maze_size - 2 and direction[1] != maze_size - 2:
+                            frontier_prep(maze, frontier_list, checked_list, direction)
         checked_list.append((start_row, start_column))
         frontier_list.remove((start_row, start_column))
 
 
 def main():
-    maze = create_maze(40)
+    maze = create_maze(maze_size)
     frontier_list = []
     checked_list = []
     release_kraken(maze, frontier_list, checked_list)
+    run = 0
 
     # while checked_list != frontier_list or run == 0:
-    for i in range(0, 3000):
+    while frontier_list:
         prim_gen(maze, frontier_list, checked_list)
-    maze = np.delete(maze, 39, 0)
-    maze = np.delete(maze, 39, 1)
+        run += 1
+    maze = np.delete(maze, maze_size - 1, 0)
+    maze = np.delete(maze, maze_size - 1, 1)
     maze[5][0] = 0
-    maze[35][38] = 0
+    maze[maze_size - 5][maze_size - 2] = 0
     maze[5][1] = 0
-    maze[35][37] = 0
+    maze[maze_size - 5][maze_size - 3] = 0
     draw_maze(maze)
-    print(len(frontier_list))
+    print(run)
 
 
 main()
