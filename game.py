@@ -21,8 +21,6 @@ class Player:
         self.image = pg.draw.rect(self.screen, self.color, self.rect)
         self.speed = speed
 
-        # pg.draw.rect(self.screen, self.color, self.rect)
-
     def update(self):
         pg.draw.rect(self.screen, self.color, self.rect)
 
@@ -77,6 +75,17 @@ def create_maze(filename):
     return screen, wall_list, walls
 
 
+def movement(player, walls, desired_movement, bounce_movement):
+    player.clear()
+    player.rect.move_ip(desired_movement)
+    if player.rect.collidelist(walls) != -1:
+        player.rect.move_ip(bounce_movement)
+        player.update()
+    else:
+        player.clear()
+        player.update()
+
+
 def run_maze():
     screen, wall_list, walls = create_maze("testmaze1.png")
     player = Player(screen, (0, 0, 255), pg.rect.Rect(15, 5, 5, 5), 2)
@@ -91,53 +100,13 @@ def run_maze():
                 print (x_size, y_size)
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_a: # A to move left
-                    player.clear()
-                    player.rect.move_ip(-player.speed, 0)
-                    if  player.rect.collidelist(walls) != -1:
-                        #player.clear()
-                        player.rect.move_ip(player.speed, 0)
-                        player.update()
-                        pass
-                    else:
-                        player.clear()
-                        #player.rect.move_ip(-1, 0)
-                        player.update()
-
+                    movement(player, walls, (-player.speed, 0), (player.speed, 0))
                 if event.key == pg.K_d: # D to move right
-                    player.clear()
-                    player.rect.move_ip(player.speed, 0)
-                    if player.rect.collidelist(walls) != -1:
-                        #player.clear()
-                        player.rect.move_ip(-player.speed, 0)
-                        player.update()
-                    else:
-                        #player.clear()
-                        #player.rect.move_ip(1, 0)
-                        player.update()
-
+                    movement(player, walls, (player.speed, 0), (-player.speed, 0))
                 if event.key == pg.K_s: # S to move down
-                    player.clear()
-                    player.rect.move_ip(0, player.speed)
-                    if player.rect.collidelist(walls) != -1:
-                        # player.clear()
-                        player.rect.move_ip(0, -player.speed)
-                        player.update()
-                    else:
-                        #player.clear()
-                        # player.rect.move_ip(0, 1)
-                        player.update()
-
+                    movement(player, walls, (0, player.speed), (0, -player.speed))
                 if event.key == pg.K_w: # W to move up
-                    player.clear()
-                    player.rect.move_ip(0, -player.speed)
-                    if player.rect.collidelist(walls) != -1:
-                        # player.clear()
-                        player.rect.move_ip(0, player.speed)
-                        player.update()
-                    else:
-                        # player.clear()
-                        # player.rect.move_ip(0, -1)
-                        player.update()
+                    movement(player, walls, (0, -player.speed), (0, player.speed))
                 enemy_function(enemy, player)
             if event.type == pg.QUIT:
                 running = False
