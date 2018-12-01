@@ -23,11 +23,8 @@ class Player:
     def update(self):
         pg.draw.rect(self.screen, self.color, self.rect)
 
-    def clear(self):
-        pg.draw.rect(self.screen, (255, 255, 255), self.rect)
 
-
-def enemy_function(enemy_object, player_object):
+def enemy_function(screen, enemy_object, player_object):
     player_rect = player_object.rect
     player_position = player_x, player_y = player_rect.x, player_rect.y
     enemy_rect = enemy_object.rect
@@ -46,14 +43,29 @@ def enemy_function(enemy_object, player_object):
         increment_y = enemy_object.speed
     elif relative_y == 0:
         increment_y = 0
-    if (relative_x, relative_y) == (0, 0):
-        print(relative_x)
-        print(relative_y)
-        print('YOU LOSE!')
-        # sys.exit(-1)
+    if enemy_rect.colliderect(player_rect):
+        lose(screen)
     if enemy_position != player_position:
         enemy_rect.move_ip(increment_x, increment_y)
         enemy_object.update()
+
+
+def text_objects(text, font):
+    # https: // pythonprogramming.net / displaying - text - pygame - screen /
+    textSurface = font.render(text, True, (0, 0, 0))
+    return textSurface, textSurface.get_rect()
+
+
+def lose(screen):
+    screen_width = screen.get_width()
+    screen_height = screen.get_height()
+    pg.time.wait(1000)
+    screen.fill((255, 255, 255))
+    pg.font.init()
+    lose_font = pg.font.Font('FreeSansBold.ttf', 115)
+    text_surface, text_rect = text_objects('GAME OVER', lose_font)
+    text_rect.center = (screen_width / 2, screen_height / 3)
+    screen.blit(text_surface, text_rect)
 
 
 def create_maze():
@@ -73,19 +85,21 @@ def create_maze():
     return screen, walls
 
 
-def movement(player, walls, desired_movement, bounce_movement):
-    player.clear()
+def movement(screen, player, walls, desired_movement, bounce_movement):
+    screen.blit(background, (0, 0))
     player.rect.move_ip(desired_movement)
     if player.rect.collidelist(walls) != -1:
         player.rect.move_ip(bounce_movement)
         player.update()
     else:
-        player.clear()
+        screen.blit(background, (0, 0))
         player.update()
 
 
 def run_maze():
     screen, walls = create_maze()
+    global background
+    background = screen.copy()
     player = Player(screen, (0, 0, 255), pg.rect.Rect(30, 30, 7, 7), 2)
     enemy = Player(screen, (255, 0, 0), pg.rect.Rect(30, 25, 7, 7), 1)
     pg.key.set_repeat(30, 30)
@@ -99,14 +113,14 @@ def run_maze():
 
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_a: # A to move left
-                    movement(player, walls, (-player.speed, 0), (player.speed, 0))
+                    movement(screen, player, walls, (-player.speed, 0), (player.speed, 0))
                 if event.key == pg.K_d: # D to move right
-                    movement(player, walls, (player.speed, 0), (-player.speed, 0))
+                    movement(screen, player, walls, (player.speed, 0), (-player.speed, 0))
                 if event.key == pg.K_s: # S to move down
-                    movement(player, walls, (0, player.speed), (0, -player.speed))
+                    movement(screen, player, walls, (0, player.speed), (0, -player.speed))
                 if event.key == pg.K_w: # W to move up
-                    movement(player, walls, (0, -player.speed), (0, player.speed))
-                enemy_function(enemy, player)
+                    movement(screen, player, walls, (0, -player.speed), (0, player.speed))
+                enemy_function(screen, enemy, player)
 
             if event.type == pg.QUIT:
                 running = False
