@@ -1,11 +1,5 @@
 import pygame as pg
-import numpy as np
-from random import randint, getrandbits, choice
-from PIL import Image
-import matplotlib.pyplot as pyplot
-from math import floor, ceil
-import time
-from recursive_backtracker import generate
+from recursive_backtracker import recursive_backtracker
 
 
 class Wall:
@@ -63,15 +57,13 @@ def enemy_function(enemy_object, player_object):
 
 
 def create_maze():
-    Black = (0, 0, 0)
     White = (255, 255, 255)
-    maze = generate()
+    maze = recursive_backtracker()
     side_length = maze.shape[0]
     size = maze.shape[0] * 20
     print(size)
     screen = pg.display.set_mode((size, size))
     screen.fill(White)
-    count = 0
     walls = []
     for i in range(0, side_length):
         for j in range(0, side_length):
@@ -104,6 +96,7 @@ def run_maze():
                 x_size, y_size = event.dict['size'][0], event.dict['size'][1]
                 pg.transform.scale(screen, (x_size, y_size))
                 print (x_size, y_size)
+
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_a: # A to move left
                     movement(player, walls, (-player.speed, 0), (player.speed, 0))
@@ -114,9 +107,9 @@ def run_maze():
                 if event.key == pg.K_w: # W to move up
                     movement(player, walls, (0, -player.speed), (0, player.speed))
                 enemy_function(enemy, player)
+
             if event.type == pg.QUIT:
                 running = False
-        # screen.blit(player.image, player.rect) # Makes it go nutty
         pg.display.flip()
 
 run_maze()
