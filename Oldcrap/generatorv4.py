@@ -11,35 +11,13 @@ from math import floor, ceil
 Debug = False
 
 class Chamber:
-    def __init__(self, array, row, column, row_gap, col_gap, quadrant):
+    def __init__(self, array, row, column):
         self.array = array
         self.num_rows = array.shape[0] - 1
         self.num_columns = array.shape[1] - 1
         self.q = quadrant
         self.row_pos = row
         self.col_pos = column
-        if quadrant == 0:
-            self.row_gap = None
-        elif quadrant == 1:
-            self.row_gap = row_gap
-        elif quadrant == 2:
-            self.row_gap = row_gap - self.col_pos
-        elif quadrant == 3:
-            self.row_gap = row_gap
-        elif quadrant == 4:
-            self.row_gap = row_gap - self.col_pos
-
-        if quadrant == 0:
-            self.col_gap = None
-        elif quadrant == 1:
-            self.col_gap = col_gap
-        elif quadrant == 2:
-            self.col_gap = col_gap
-        elif quadrant == 3:
-            self.col_gap = col_gap - self.row_pos
-        elif quadrant == 4:
-            self.col_gap = col_gap - self.row_pos
-
 
     def divide(self, maze):
         # Separate these conditions
@@ -55,6 +33,9 @@ class Chamber:
             else:
                 row_wall = ceil((self.num_rows / 2))
 
+            if row_wall % 2 == 1:
+                row_wall += 1
+
             array[row_wall,:] = 1
             #col_wall = new_rand(1, self.num_columns-1)
 
@@ -62,6 +43,8 @@ class Chamber:
                 col_wall = floor((self.num_rows / 2))
             else:
                 col_wall = ceil((self.num_rows / 2))
+            if row_wall % 2 == 1:
+                row_wall += 1
 
             array[:, col_wall] = 1
 

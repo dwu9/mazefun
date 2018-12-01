@@ -81,7 +81,7 @@ def rand_point(maze, cell_list, stack):
     cell_list.remove(next)
     return maze, cell, next, cell_list
 
-def generate():
+def recursive_backtracker():
     stack = []
     maze, cell_list = create_maze(size)
     maze, cell, next, cell_list = rand_point(maze, cell_list, stack)
@@ -99,6 +99,4 @@ def generate():
             stack.append(next)
             cell_list.remove(next)
     return maze
-    # draw_maze(maze)
-
 
