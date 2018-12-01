@@ -44,7 +44,7 @@ def frontier_prep(maze, frontier_list, checked_list, direction):
         frontier_list.append(direction)
 
 
-def prim_gen(maze, frontier_list, checked_list):
+def simple_gen(maze, frontier_list, checked_list):
     row_index = maze.shape[0] - 1
     column_index = maze.shape[1] - 1
     start_row, start_column = rand.choice(frontier_list)
@@ -63,7 +63,7 @@ def prim_gen(maze, frontier_list, checked_list):
         frontier_list.remove((start_row, start_column))
 
 
-def main():
+def simple_generate():
     maze = create_maze(maze_size)
     frontier_list = []
     checked_list = []
@@ -72,7 +72,7 @@ def main():
 
     # while checked_list != frontier_list or run == 0:
     while frontier_list:
-        prim_gen(maze, frontier_list, checked_list)
+        simple_gen(maze, frontier_list, checked_list)
         run += 1
         #draw_maze(maze)
     maze = np.delete(maze, maze_size - 1, 0)
@@ -81,8 +81,5 @@ def main():
     maze[maze_size - 5][maze_size - 2] = 0
     maze[5][1] = 0
     maze[maze_size - 5][maze_size - 3] = 0
-    draw_maze(maze)
-    print(run)
-
-
-main()
+    # draw_maze(maze)
+    return maze

@@ -1,5 +1,6 @@
 import pygame as pg
 from recursive_backtracker import recursive_backtracker
+from simple_generator import simple_generate
 
 
 class Wall:
@@ -44,10 +45,12 @@ def enemy_function(screen, enemy_object, player_object):
     elif relative_y == 0:
         increment_y = 0
     if enemy_rect.colliderect(player_rect):
-        lose(screen)
+        results_screen(screen, "GAME OVER")
     if enemy_position != player_position:
         enemy_rect.move_ip(increment_x, increment_y)
         enemy_object.update()
+    if player_x > screen.get_width() or player_y > screen.get_height():
+        results_screen(screen, "YOU WIN")
 
 
 def text_objects(text, font):
@@ -56,14 +59,14 @@ def text_objects(text, font):
     return textSurface, textSurface.get_rect()
 
 
-def lose(screen):
+def results_screen(screen, text_result):
     screen_width = screen.get_width()
     screen_height = screen.get_height()
-    pg.time.wait(1000)
+    pg.time.wait(500)
     screen.fill((255, 255, 255))
     pg.font.init()
     lose_font = pg.font.Font('FreeSansBold.ttf', 115)
-    text_surface, text_rect = text_objects('GAME OVER', lose_font)
+    text_surface, text_rect = text_objects(text_result, lose_font)
     text_rect.center = (screen_width / 2, screen_height / 3)
     screen.blit(text_surface, text_rect)
 
@@ -101,7 +104,7 @@ def run_maze():
     global background
     background = screen.copy()
     player = Player(screen, (0, 0, 255), pg.rect.Rect(30, 30, 7, 7), 2)
-    enemy = Player(screen, (255, 0, 0), pg.rect.Rect(30, 25, 7, 7), 1)
+    enemy = Player(screen, (255, 0, 0), pg.rect.Rect(300, 205, 7, 7), 1)
     pg.key.set_repeat(30, 30)
     running = True
     while running:
