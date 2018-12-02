@@ -100,3 +100,7 @@ def recursive_backtracker():
             cell_list.remove(next)
     return maze
 
+'''
+maze = recursive_backtracker()
+draw_maze(maze)
+'''
