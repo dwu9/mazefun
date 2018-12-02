@@ -1,5 +1,7 @@
 import pygame as pg
-import picture
+from recursive_backtracker import recursive_backtracker
+from simple_generator import simple_generator
+from recursive_division import recursive_division
 
 
 class Wall:
@@ -8,7 +10,7 @@ class Wall:
         self.rect = rect
         self.x = x
         self.y = y
-        pg.draw.rect(self.image, (0, 0, 0), [x, y, 1, 1])
+        pg.draw.rect(self.image, (0, 0, 0), [x, y, 20, 20])
 
 
 class Player:
@@ -23,11 +25,8 @@ class Player:
     def update(self):
         pg.draw.rect(self.screen, self.color, self.rect)
 
-    def clear(self):
-        pg.draw.rect(self.screen, (255, 255, 255), self.rect)
 
-
-def enemy_function(enemy_object, player_object):
+def enemy_function(screen, enemy_object, player_object):
     player_rect = player_object.rect
     player_position = player_x, player_y = player_rect.x, player_rect.y
     enemy_rect = enemy_object.rect
@@ -46,49 +45,76 @@ def enemy_function(enemy_object, player_object):
         increment_y = enemy_object.speed
     elif relative_y == 0:
         increment_y = 0
-    if (relative_x, relative_y) == (0, 0):
-        print(relative_x)
-        print(relative_y)
-        print('YOU LOSE!')
-        # sys.exit(-1)
+    if enemy_rect.colliderect(player_rect):
+        results_screen(screen, "GAME OVER")
+        quit_prompt(screen)
     if enemy_position != player_position:
         enemy_rect.move_ip(increment_x, increment_y)
         enemy_object.update()
+    if player_x > screen.get_width() or player_y > screen.get_height():
+        results_screen(screen, "YOU WIN")
+        quit_prompt(screen)
 
 
-def create_maze(filename):
-    image = picture.image_to_array(filename)
-    height, width = image.shape
-    screen = pg.display.set_mode((width, height), pg.RESIZABLE)
+def text_objects(text, font):
+    # https: // pythonprogramming.net / displaying - text - pygame - screen /
+    textSurface = font.render(text, True, (0, 0, 0))
+    return textSurface, textSurface.get_rect()
+
+
+def results_screen(screen, text_result):
+    screen_width = screen.get_width()
+    screen_height = screen.get_height()
+    pg.time.wait(500)
     screen.fill((255, 255, 255))
-    wall_list= []
+    pg.font.init()
+    result_font = pg.font.Font('FreeSansBold.ttf', 115)
+    text_surface, text_rect = text_objects(text_result, result_font)
+    text_rect.center = (screen_width / 2, screen_height / 3)
+    screen.blit(text_surface, text_rect)
+
+
+def quit_prompt(screen):
+    screen_width = screen.get_width()
+    screen_height = screen.get_height()
+    quit_font = pg.font.Font('FreeSansBold.ttf', 60)
+    text_surface, text_rect = text_objects('Press Enter to Quit', quit_font)
+    text_rect.center = (screen_width / 2, screen_height / 2)
+    screen.blit(text_surface, text_rect)
+
+
+def create_maze(generator_type):
+    White = (255, 255, 255)
+    maze = generator_type()
+    side_length = maze.shape[0]
+    size = maze.shape[0] * 20
+    screen = pg.display.set_mode((size, size))
+    screen.fill(White)
     walls = []
-    for i in range(0, width):
-        for j in range(0, height):
-            if image[j][i] < 70:
-                wall = Wall(i, j, pg.Rect(i, j, 1, 1))
+    for i in range(0, side_length):
+        for j in range(0, side_length):
+            if maze[i, j]:
+                wall = Wall(i * 20, j * 20, pg.Rect(i * 20, j * 20, 20, 20))
                 walls.append(wall.rect)
-                wall_list.append((i, j))
-    print(width)
-    print(len(walls))
-    return screen, wall_list, walls
+    return screen, walls
 
 
-def movement(player, walls, desired_movement, bounce_movement):
-    player.clear()
+def movement(screen, player, walls, desired_movement, bounce_movement):
     player.rect.move_ip(desired_movement)
     if player.rect.collidelist(walls) != -1:
         player.rect.move_ip(bounce_movement)
         player.update()
     else:
-        player.clear()
+        screen.blit(background, (0, 0))
         player.update()
 
 
-def run_maze():
-    screen, wall_list, walls = create_maze("testmaze1.png")
-    player = Player(screen, (0, 0, 255), pg.rect.Rect(15, 5, 5, 5), 2)
-    enemy = Player(screen, (255, 0, 0), pg.rect.Rect(10, 0, 5, 5), 1)
+def run_maze(generator_type, p_speed, e_speed):
+    screen, walls = create_maze(generator_type)
+    global background
+    background = screen.copy()
+    player = Player(screen, (0, 0, 255), pg.rect.Rect(10, 46, 7, 7), p_speed)
+    enemy = Player(screen, (255, 0, 0), pg.rect.Rect(350, 350, 7, 7), e_speed)
     pg.key.set_repeat(30, 30)
     running = True
     while running:
@@ -97,19 +123,26 @@ def run_maze():
                 x_size, y_size = event.dict['size'][0], event.dict['size'][1]
                 pg.transform.scale(screen, (x_size, y_size))
                 print (x_size, y_size)
+
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_a: # A to move left
-                    movement(player, walls, (-player.speed, 0), (player.speed, 0))
-                if event.key == pg.K_d: # D to move right
-                    movement(player, walls, (player.speed, 0), (-player.speed, 0))
-                if event.key == pg.K_s: # S to move down
-                    movement(player, walls, (0, player.speed), (0, -player.speed))
-                if event.key == pg.K_w: # W t-o move up
-                    movement(player, walls, (0, -player.speed), (0, player.speed))
-                enemy_function(enemy, player)
+                screen.blit(background, (0, 0))
+                player.update()
+                if event.key == pg.K_a or event.key == pg.K_LEFT: # A to move left
+                    movement(screen, player, walls, (-player.speed, 0), (player.speed, 0))
+                if event.key == pg.K_d or event.key == pg.K_RIGHT: # D to move right
+                    movement(screen,     player, walls, (player.speed, 0), (-player.speed, 0))
+                if event.key == pg.K_s or event.key == pg.K_DOWN: # S to move down
+                    movement(screen, player, walls, (0, player.speed), (0, -player.speed))
+                if event.key == pg.K_w or event.key == pg.K_UP: # W to move up
+                    movement(screen, player, walls, (0, -player.speed), (0, player.speed))
+                if event.key == pg.K_RETURN:
+                    running = False
+                enemy_function(screen, enemy, player)
+
             if event.type == pg.QUIT:
                 running = False
-        # screen.blit(player.image, player.rect) # Makes it go nutty
         pg.display.flip()
 
-run_maze()
+# run_maze(generator, playerspeed, enemyspeed)
+run_maze(recursive_backtracker, 3, 1)
+
