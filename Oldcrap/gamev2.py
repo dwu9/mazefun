@@ -1,5 +1,11 @@
 import pygame as pg
-import picture
+import numpy as np
+from random import randint, getrandbits, choice
+from PIL import Image
+import matplotlib.pyplot as pyplot
+from math import floor, ceil
+import time
+from recursive_backtracker import recursive_backtracker
 
 
 class Wall:
@@ -8,7 +14,7 @@ class Wall:
         self.rect = rect
         self.x = x
         self.y = y
-        pg.draw.rect(self.image, (0, 0, 0), [x, y, 1, 1])
+        pg.draw.rect(self.image, (0, 0, 0), [x, y, 20, 20])
 
 
 class Player:
@@ -56,22 +62,23 @@ def enemy_function(enemy_object, player_object):
         enemy_object.update()
 
 
-def create_maze(filename):
-    image = picture.image_to_array(filename)
-    height, width = image.shape
-    screen = pg.display.set_mode((width, height), pg.RESIZABLE)
-    screen.fill((255, 255, 255))
-    wall_list= []
+def create_maze():
+    Black = (0, 0, 0)
+    White = (255, 255, 255)
+    maze = recursive_backtracker()
+    side_length = maze.shape[0]
+    size = maze.shape[0] * 20
+    print(size)
+    screen = pg.display.set_mode((size, size))
+    screen.fill(White)
+    count = 0
     walls = []
-    for i in range(0, width):
-        for j in range(0, height):
-            if image[j][i] < 70:
-                wall = Wall(i, j, pg.Rect(i, j, 1, 1))
+    for i in range(0, side_length):
+        for j in range(0, side_length):
+            if maze[i, j]:
+                wall = Wall(i * 20, j * 20, pg.Rect(i * 20, j * 20, 20, 20))
                 walls.append(wall.rect)
-                wall_list.append((i, j))
-    print(width)
-    print(len(walls))
-    return screen, wall_list, walls
+    return screen, walls
 
 
 def movement(player, walls, desired_movement, bounce_movement):
@@ -86,9 +93,9 @@ def movement(player, walls, desired_movement, bounce_movement):
 
 
 def run_maze():
-    screen, wall_list, walls = create_maze("testmaze1.png")
-    player = Player(screen, (0, 0, 255), pg.rect.Rect(15, 5, 5, 5), 2)
-    enemy = Player(screen, (255, 0, 0), pg.rect.Rect(10, 0, 5, 5), 1)
+    screen, walls = create_maze()
+    player = Player(screen, (0, 0, 255), pg.rect.Rect(30, 30, 7, 7), 2)
+    enemy = Player(screen, (255, 0, 0), pg.rect.Rect(30, 25, 7, 7), 1)
     pg.key.set_repeat(30, 30)
     running = True
     while running:
@@ -104,7 +111,7 @@ def run_maze():
                     movement(player, walls, (player.speed, 0), (-player.speed, 0))
                 if event.key == pg.K_s: # S to move down
                     movement(player, walls, (0, player.speed), (0, -player.speed))
-                if event.key == pg.K_w: # W t-o move up
+                if event.key == pg.K_w: # W to move up
                     movement(player, walls, (0, -player.speed), (0, player.speed))
                 enemy_function(enemy, player)
             if event.type == pg.QUIT:

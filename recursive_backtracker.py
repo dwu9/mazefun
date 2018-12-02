@@ -5,7 +5,7 @@ import matplotlib.pyplot as pyplot
 from math import floor, ceil
 import time
 
-size = 49
+size = 39
 
 def create_maze(size):
     # Create a starting blank chamber
@@ -81,25 +81,22 @@ def rand_point(maze, cell_list, stack):
     cell_list.remove(next)
     return maze, cell, next, cell_list
 
-t0 = time.time()
-stack = []
-maze, cell_list = create_maze(size)
-maze, cell, next, cell_list = rand_point(maze, cell_list, stack)
-stack.append(cell)
-stack.append(next)
+def recursive_backtracker():
+    stack = []
+    maze, cell_list = create_maze(size)
+    maze, cell, next, cell_list = rand_point(maze, cell_list, stack)
+    stack.append(cell)
+    stack.append(next)
 
-while cell_list:
-    maze, next = rand_n(next, maze, stack)
-    if next == None:
-        for point in reversed(stack):
-            if neighbour_flag(point, stack):
-                next = point
-                break
-    else:
-        stack.append(next)
-        cell_list.remove(next)
-draw_maze(maze)
-
-t1 = time.time()
-print("It took " + str(t1-t0) + "s")
+    while cell_list:
+        maze, next = rand_n(next, maze, stack)
+        if next == None:
+            for point in reversed(stack):
+                if neighbour_flag(point, stack):
+                    next = point
+                    break
+        else:
+            stack.append(next)
+            cell_list.remove(next)
+    return maze
 
