@@ -27,7 +27,6 @@ class Player:
 
 
 def enemy_function(screen, enemy_object, player_object):
-    done_flag = False
     player_rect = player_object.rect
     player_position = player_x, player_y = player_rect.x, player_rect.y
     enemy_rect = enemy_object.rect
@@ -49,15 +48,12 @@ def enemy_function(screen, enemy_object, player_object):
     if enemy_rect.colliderect(player_rect):
         results_screen(screen, "GAME OVER")
         quit_prompt(screen)
-        done_flag = True
     if enemy_position != player_position:
         enemy_rect.move_ip(increment_x, increment_y)
         enemy_object.update()
     if player_x > screen.get_width() or player_y > screen.get_height():
         results_screen(screen, "YOU WIN")
         quit_prompt(screen)
-        done_flag = True
-    return done_flag
 
 
 def text_objects(text, font):
@@ -69,7 +65,7 @@ def text_objects(text, font):
 def results_screen(screen, text_result):
     screen_width = screen.get_width()
     screen_height = screen.get_height()
-    # pg.time.wait(500)
+    pg.time.wait(500)
     screen.fill((255, 255, 255))
     pg.font.init()
     result_font = pg.font.Font('FreeSansBold.ttf', 115)
@@ -130,7 +126,6 @@ def run_maze(generator_type, p_speed, e_speed):
     enemy = Player(screen, (255, 0, 0), pg.rect.Rect(350, 350, 7, 7), e_speed)
     pg.key.set_repeat(30, 30)
     running = True
-    done_flag = False
     while running:
         for event in pg.event.get():
             if event.type == pg.VIDEORESIZE:
@@ -141,19 +136,20 @@ def run_maze(generator_type, p_speed, e_speed):
             if event.type == pg.KEYDOWN:
                 screen.blit(background, (0, 0))
                 player.update()
-                if (event.key == pg.K_a or event.key == pg.K_LEFT) and not done_flag: # A to move left
+                if event.key == pg.K_a or event.key == pg.K_LEFT: # A to move left
                     movement(screen, player, walls, (-player.speed, 0), (player.speed, 0))
-                if (event.key == pg.K_d or event.key == pg.K_RIGHT) and not done_flag: # D to move right
+                if event.key == pg.K_d or event.key == pg.K_RIGHT: # D to move right
                     movement(screen,     player, walls, (player.speed, 0), (-player.speed, 0))
-                if (event.key == pg.K_s or event.key == pg.K_DOWN) and not done_flag: # S to move down
+                if event.key == pg.K_s or event.key == pg.K_DOWN: # S to move down
                     movement(screen, player, walls, (0, player.speed), (0, -player.speed))
-                if (event.key == pg.K_w or event.key == pg.K_UP) and not done_flag: # W to move up
+                if event.key == pg.K_w or event.key == pg.K_UP: # W to move up
                     movement(screen, player, walls, (0, -player.speed), (0, player.speed))
                 if event.key == pg.K_RETURN:
                     running = False
-                done_flag = enemy_function(screen, enemy, player)
+                enemy_function(screen, enemy, player)
             if event.type == pg.QUIT:
                 running = False
         pg.display.flip()
 
-#run_maze(generator, playerspeed, enemyspeed)
+# run_maze(generator, playerspeed, enemyspeed)
+

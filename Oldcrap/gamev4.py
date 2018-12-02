@@ -27,7 +27,8 @@ class Player:
 
 
 def enemy_function(screen, enemy_object, player_object):
-    done_flag = False
+    lose_flag = False
+    win_flag = False
     player_rect = player_object.rect
     player_position = player_x, player_y = player_rect.x, player_rect.y
     enemy_rect = enemy_object.rect
@@ -47,17 +48,13 @@ def enemy_function(screen, enemy_object, player_object):
     elif relative_y == 0:
         increment_y = 0
     if enemy_rect.colliderect(player_rect):
-        results_screen(screen, "GAME OVER")
-        quit_prompt(screen)
-        done_flag = True
+        lose_flag = True
     if enemy_position != player_position:
         enemy_rect.move_ip(increment_x, increment_y)
         enemy_object.update()
     if player_x > screen.get_width() or player_y > screen.get_height():
-        results_screen(screen, "YOU WIN")
-        quit_prompt(screen)
-        done_flag = True
-    return done_flag
+        win_flag = True
+    return lose_flag, win_flag
 
 
 def text_objects(text, font):
@@ -69,7 +66,7 @@ def text_objects(text, font):
 def results_screen(screen, text_result):
     screen_width = screen.get_width()
     screen_height = screen.get_height()
-    # pg.time.wait(500)
+    pg.time.wait(500)
     screen.fill((255, 255, 255))
     pg.font.init()
     result_font = pg.font.Font('FreeSansBold.ttf', 115)
@@ -87,18 +84,9 @@ def quit_prompt(screen):
     screen.blit(text_surface, text_rect)
 
 
-def choose_generator(n):
-    if n == 1:
-        return simple_generator()
-    elif n == 2:
-        return recursive_division()
-    elif n == 3:
-        return recursive_backtracker()
-
-
 def create_maze(generator_type):
     White = (255, 255, 255)
-    maze = choose_generator(generator_type)
+    maze = generator_type()
     side_length = maze.shape[0]
     size = maze.shape[0] * 20
     screen = pg.display.set_mode((size, size))
@@ -130,30 +118,45 @@ def run_maze(generator_type, p_speed, e_speed):
     enemy = Player(screen, (255, 0, 0), pg.rect.Rect(350, 350, 7, 7), e_speed)
     pg.key.set_repeat(30, 30)
     running = True
-    done_flag = False
     while running:
         for event in pg.event.get():
             if event.type == pg.VIDEORESIZE:
                 x_size, y_size = event.dict['size'][0], event.dict['size'][1]
                 pg.transform.scale(screen, (x_size, y_size))
-                print (x_size, y_size)
+                print(x_size, y_size)
 
             if event.type == pg.KEYDOWN:
                 screen.blit(background, (0, 0))
                 player.update()
-                if (event.key == pg.K_a or event.key == pg.K_LEFT) and not done_flag: # A to move left
+                if event.key == pg.K_a or event.key == pg.K_LEFT:  # A to move left
                     movement(screen, player, walls, (-player.speed, 0), (player.speed, 0))
-                if (event.key == pg.K_d or event.key == pg.K_RIGHT) and not done_flag: # D to move right
-                    movement(screen,     player, walls, (player.speed, 0), (-player.speed, 0))
-                if (event.key == pg.K_s or event.key == pg.K_DOWN) and not done_flag: # S to move down
+                if event.key == pg.K_d or event.key == pg.K_RIGHT:  # D to move right
+                    movement(screen, player, walls, (player.speed, 0), (-player.speed, 0))
+                if event.key == pg.K_s or event.key == pg.K_DOWN:  # S to move down
                     movement(screen, player, walls, (0, player.speed), (0, -player.speed))
-                if (event.key == pg.K_w or event.key == pg.K_UP) and not done_flag: # W to move up
+                if event.key == pg.K_w or event.key == pg.K_UP:  # W to move up
                     movement(screen, player, walls, (0, -player.speed), (0, player.speed))
                 if event.key == pg.K_RETURN:
                     running = False
-                done_flag = enemy_function(screen, enemy, player)
+                lose_flag, win_flag = enemy_function(screen, enemy, player)
+                if lose_flag or win_flag:
+                    if lose_flag:
+                        message = "GAME OVER"
+                    else:
+                        message = "YOU WIN"
+                    while True:
+                        results_screen(screen, message)
+                        quit_prompt(screen)
+                        event = pg.event.wait()
+                        if event.type == pg.KEYDOWN:
+                            if event.key == pg.K_RETURN:
+                                running = False
+                                break
             if event.type == pg.QUIT:
                 running = False
         pg.display.flip()
 
-#run_maze(generator, playerspeed, enemyspeed)
+
+# run_maze(generator, playerspeed, enemyspeed)
+run_maze(recursive_backtracker, 3, 1)
+

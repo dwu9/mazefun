@@ -1,5 +1,5 @@
 import pygame as pg
-import picture
+from Oldcrap import picture
 
 
 def create_maze(filename):

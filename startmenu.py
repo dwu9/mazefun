@@ -7,12 +7,14 @@ def print_bold(text):
     print('\033[1m' + text)
     print('\033[0m', end = '')
 
+
 # https://stackoverflow.com/questions/9246076/how-to-print-one-character-at-a-time-on-one-line
 def one_at_a_time(text):
     for i in text:
         sys.stdout.write(i)
         sys.stdout.flush()
         sleep(0.05)
+
 
 def print_header():
     # Credit to http://patorjk.com/software/taag/#p=display&f=Doom&t=MazeFun
@@ -41,7 +43,8 @@ def print_header():
                    "randomly generated using that algorithm!\n"
     print()
     print(description)
-    sleep(5)
+    sleep(3)
+
 
 def choose_algorithm():
     print("The three algorithms are: ")
@@ -62,6 +65,7 @@ def choose_algorithm():
     print("You have selected " + choice_list[choice - 1])
     return choice
 
+
 def learn(choice):
     learn = ''
     sleep(1)
@@ -79,28 +83,44 @@ def learn(choice):
         if choice == 1:
             # https://stackoverflow.com/questions/8924173/how-do-i-print-bold-text-in-python
             print_bold("Simple Prim's Based Generator")
-            print("[David explain here]")
+            sleep(1)
+            print("The simple generator works a bit like minesweeper. First, it chooses a block and\n"
+                  "looks at the number of walls around it. Based on this, it decides whether to\n"
+                  "clear the block or leave it unchanged. Then it adds the surrounding unchecked\n"
+                  "blocks to a list where it will perform the same check and clear process until\n"
+                  "the list is empty.")
+            print()
+            while input("Press Enter to Continue") != '':
+                pass
         elif choice == 2:
             print_bold("Recursive Division")
+            sleep(1)
             print("Recursive division works by recursion - the process of breaking down the big\n"
-                  "problem of generating a maze into a series of much more manageable, smaller problems\n"
-                  "You start with an empty array. You then cut it into two, to get two smaller chambers.\n"
-                  "You then cut each of those two into even smaller chamers. This is down until no more\n"
-                  "divisions can take place, and what you're left with is a complete maze!")
-            if input("Press enter to view an animation") == '':
-                mazes = maze_animation()
-                for i in mazes:
-                    os.system('clear')
-                    print(i)
-                    sleep(1.5)
+                  "problem of generating a maze into a series of much more manageable, smaller\n"
+                  "problems. You start with an empty field. You then cut it into two, to get\n"
+                  "two smaller chambers. You then cut each of those two into even smaller chambers.\n"
+                  "This is done until no more divisions can take place, and what you're left\n"
+                  "with is a complete maze!")
+            print()
+            while input("Press Enter to View An Animation") != '':
+                pass
+            mazes = maze_animation()
+            for i in mazes:
+                os.system('clear')
+                print(i)
+                sleep(1.5)
 
         elif choice == 3:
-            os.system('clear')
             print_bold("Recursive Backtracker")
-            one_at_a_time("Recursive backtracker works like a snake. It starts at a random point and starts\n"
-                  "eating up cells on the grid randomly changing direction, until it hits a dead end.\n"
-                  "Once that happens it traverses back until it finds a cell that does have neighbours.\n"
-                  "Rinse and Repeat this process until all cells are visited, and you have a Maze!")
+            sleep(1)
+            one_at_a_time("Recursive backtracker works like a snake. It begins at a random point and starts\n"
+                  "eating up cells on the grid randomly changing direction, until it hits a dead"
+                  "end. Once that happens it traverses back until it finds a cell that does have\n"
+                  "neighbours. Rinse and Repeat this process until all cells are visited, and\n"
+                  "you have a Maze!")
+            print()
+            while input("Press Enter to Continue") != '':
+                pass
 
 
 def choose_difficulty():
@@ -108,12 +128,13 @@ def choose_difficulty():
     difficulty = 0
     difficulty_list = ["Easy", "Hard"]
     while difficulty not in [1, 2, 3]:
-        difficulty = input("Please choose a difficulty:\n"
-              "1. Easy\n"
-              "2. Hard\n"
-              "(1/2): ")
-        print(difficulty)
-        difficulty = int(difficulty)
+        print_bold("Please choose a difficulty:" )
+        sleep(0.5)
+        print("1.Easy")
+        sleep(0.5)
+        print("2.Hard")
+        sleep(0.5)
+        difficulty = int(input("(1/2): "))
         if difficulty not in [1, 2, 3]:
             print("Please enter a valid input.")
         sleep(1)
@@ -128,14 +149,11 @@ def menu():
     learn(algorithm)
     difficulty = choose_difficulty()
     print("Both WASD or the Directional Keypad can be used for movement!\n"
-          "Your goal is to move the blue square to the end of the maze while avioding\n"
-          "the Red Enemy Square.\n"
+          "Your goal is to move the blue square to the end of the maze while avoiding\n"
+          "the Flying Red Enemy Square.\n"
           "Goodluck!")
     sleep(1)
     print_bold("Press Enter to Begin the Game")
     while input() != '':
         pass
-
-menu()
-
-
+    return algorithm, difficulty
