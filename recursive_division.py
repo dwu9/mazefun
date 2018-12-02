@@ -131,11 +131,9 @@ def create_boarders(maze):
     num_rows = maze.shape[0]
     num_cols = maze.shape[1]
     final_maze = np.ones((num_rows + 2, num_cols + 2), dtype=bool)
-    print(final_maze)
     for i in range(0, num_rows):
         for j in range(0, num_cols):
             final_maze[i + 1][j + 1] = maze[i][j]
-    print(final_maze)
     return final_maze
 
 def recurse(children_list, maze):
@@ -157,6 +155,10 @@ def recurse(children_list, maze):
 
 def recursive_division():
     maze, children_list = create_maze(40)
-    print(children_list)
     maze = recurse(children_list, maze)
     return maze
+
+'''
+maze = recursive_division()
+draw_maze(maze)
+'''

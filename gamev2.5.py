@@ -1,6 +1,7 @@
 import pygame as pg
 from recursive_backtracker import recursive_backtracker
-from simple_generator import simple_generate
+from simple_generator import simple_generator
+from recursive_division import recursive_division
 
 
 class Wall:
@@ -73,10 +74,9 @@ def results_screen(screen, text_result):
 
 def create_maze():
     White = (255, 255, 255)
-    maze = recursive_backtracker()
+    maze = simple_generator()
     side_length = maze.shape[0]
     size = maze.shape[0] * 20
-    print(size)
     screen = pg.display.set_mode((size, size))
     screen.fill(White)
     walls = []

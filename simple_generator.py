@@ -63,7 +63,7 @@ def simple_gen(maze, frontier_list, checked_list):
         frontier_list.remove((start_row, start_column))
 
 
-def simple_generate():
+def simple_generator():
     maze = create_maze(maze_size)
     frontier_list = []
     checked_list = []
@@ -81,5 +81,6 @@ def simple_generate():
     maze[maze_size - 5][maze_size - 2] = 0
     maze[5][1] = 0
     maze[maze_size - 5][maze_size - 3] = 0
+    maze[1][1] = 0
     # draw_maze(maze)
     return maze
