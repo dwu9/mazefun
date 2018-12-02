@@ -109,12 +109,12 @@ def movement(screen, player, walls, desired_movement, bounce_movement):
         player.update()
 
 
-def run_maze(generator_type):
+def run_maze(generator_type, p_speed, e_speed):
     screen, walls = create_maze(generator_type)
     global background
     background = screen.copy()
-    player = Player(screen, (0, 0, 255), pg.rect.Rect(10, 46, 7, 7), 3)
-    enemy = Player(screen, (255, 0, 0), pg.rect.Rect(350, 350, 7, 7), 1)
+    player = Player(screen, (0, 0, 255), pg.rect.Rect(10, 46, 7, 7), p_speed)
+    enemy = Player(screen, (255, 0, 0), pg.rect.Rect(350, 350, 7, 7), e_speed)
     pg.key.set_repeat(30, 30)
     running = True
     while running:
@@ -143,5 +143,6 @@ def run_maze(generator_type):
                 running = False
         pg.display.flip()
 
+# run_maze(generator, playerspeed, enemyspeed)
+run_maze(recursive_backtracker, 3, 1)
 
-run_maze(recursive_backtracker)
