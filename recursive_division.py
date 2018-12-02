@@ -1,6 +1,5 @@
 import numpy as np
 from random import randint, getrandbits
-from PIL import Image
 import matplotlib.pyplot as pyplot
 from math import floor, ceil
 
@@ -154,8 +153,13 @@ def recurse(children_list, maze):
         return maze
 
 def recursive_division():
-    maze, children_list = create_maze(40)
+    maze, children_list = create_maze(38)
     maze = recurse(children_list, maze)
+    maze[0][2] = 0
+    maze[1][2] = 0
+    maze[37][36] = 0
+    maze[38][37] = 0
+
     return maze
 
 '''

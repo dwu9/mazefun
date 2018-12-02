@@ -77,10 +77,9 @@ def simple_generator():
         #draw_maze(maze)
     maze = np.delete(maze, maze_size - 1, 0)
     maze = np.delete(maze, maze_size - 1, 1)
-    maze[5][0] = 0
-    maze[maze_size - 5][maze_size - 2] = 0
-    maze[5][1] = 0
-    maze[maze_size - 5][maze_size - 3] = 0
-    maze[1][1] = 0
+    maze[0][2] = 0
+    maze[1][2] = 0
+    maze[maze_size - 2][maze_size - 5] = 0
+    maze[maze_size - 3][maze_size - 5] = 0
     # draw_maze(maze)
     return maze

@@ -1,9 +1,7 @@
 import numpy as np
-from random import randint, getrandbits, choice
-from PIL import Image
+from random import choice
 import matplotlib.pyplot as pyplot
-from math import floor, ceil
-import time
+
 
 size = 39
 
@@ -98,6 +96,10 @@ def recursive_backtracker():
         else:
             stack.append(next)
             cell_list.remove(next)
+    maze[0][2] = 0
+    maze[1][2] = 0
+    maze[size - 1][size - 5] = 0
+    maze[size - 2][size - 5] = 0
     return maze
 
 '''

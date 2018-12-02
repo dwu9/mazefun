@@ -47,11 +47,13 @@ def enemy_function(screen, enemy_object, player_object):
         increment_y = 0
     if enemy_rect.colliderect(player_rect):
         results_screen(screen, "GAME OVER")
+        quit_prompt(screen)
     if enemy_position != player_position:
         enemy_rect.move_ip(increment_x, increment_y)
         enemy_object.update()
     if player_x > screen.get_width() or player_y > screen.get_height():
         results_screen(screen, "YOU WIN")
+        quit_prompt(screen)
 
 
 def text_objects(text, font):
@@ -66,15 +68,24 @@ def results_screen(screen, text_result):
     pg.time.wait(500)
     screen.fill((255, 255, 255))
     pg.font.init()
-    lose_font = pg.font.Font('FreeSansBold.ttf', 115)
-    text_surface, text_rect = text_objects(text_result, lose_font)
+    result_font = pg.font.Font('FreeSansBold.ttf', 115)
+    text_surface, text_rect = text_objects(text_result, result_font)
     text_rect.center = (screen_width / 2, screen_height / 3)
     screen.blit(text_surface, text_rect)
 
 
-def create_maze():
+def quit_prompt(screen):
+    screen_width = screen.get_width()
+    screen_height = screen.get_height()
+    quit_font = pg.font.Font('FreeSansBold.ttf', 60)
+    text_surface, text_rect = text_objects('Press Enter to Quit', quit_font)
+    text_rect.center = (screen_width / 2, screen_height / 2)
+    screen.blit(text_surface, text_rect)
+
+
+def create_maze(generator_type):
     White = (255, 255, 255)
-    maze = simple_generator()
+    maze = generator_type()
     side_length = maze.shape[0]
     size = maze.shape[0] * 20
     screen = pg.display.set_mode((size, size))
@@ -89,7 +100,6 @@ def create_maze():
 
 
 def movement(screen, player, walls, desired_movement, bounce_movement):
-    screen.blit(background, (0, 0))
     player.rect.move_ip(desired_movement)
     if player.rect.collidelist(walls) != -1:
         player.rect.move_ip(bounce_movement)
@@ -99,12 +109,12 @@ def movement(screen, player, walls, desired_movement, bounce_movement):
         player.update()
 
 
-def run_maze():
-    screen, walls = create_maze()
+def run_maze(generator_type):
+    screen, walls = create_maze(generator_type)
     global background
     background = screen.copy()
-    player = Player(screen, (0, 0, 255), pg.rect.Rect(30, 30, 7, 7), 2)
-    enemy = Player(screen, (255, 0, 0), pg.rect.Rect(300, 205, 7, 7), 1)
+    player = Player(screen, (0, 0, 255), pg.rect.Rect(10, 46, 7, 7), 3)
+    enemy = Player(screen, (255, 0, 0), pg.rect.Rect(350, 350, 7, 7), 1)
     pg.key.set_repeat(30, 30)
     running = True
     while running:
@@ -115,18 +125,23 @@ def run_maze():
                 print (x_size, y_size)
 
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_a: # A to move left
+                screen.blit(background, (0, 0))
+                player.update()
+                if event.key == pg.K_a or event.key == pg.K_LEFT: # A to move left
                     movement(screen, player, walls, (-player.speed, 0), (player.speed, 0))
-                if event.key == pg.K_d: # D to move right
-                    movement(screen, player, walls, (player.speed, 0), (-player.speed, 0))
-                if event.key == pg.K_s: # S to move down
+                if event.key == pg.K_d or event.key == pg.K_RIGHT: # D to move right
+                    movement(screen,     player, walls, (player.speed, 0), (-player.speed, 0))
+                if event.key == pg.K_s or event.key == pg.K_DOWN: # S to move down
                     movement(screen, player, walls, (0, player.speed), (0, -player.speed))
-                if event.key == pg.K_w: # W to move up
+                if event.key == pg.K_w or event.key == pg.K_UP: # W to move up
                     movement(screen, player, walls, (0, -player.speed), (0, player.speed))
+                if event.key == pg.K_RETURN:
+                    running = False
                 enemy_function(screen, enemy, player)
 
             if event.type == pg.QUIT:
                 running = False
         pg.display.flip()
 
-run_maze()
+
+run_maze(recursive_backtracker)
