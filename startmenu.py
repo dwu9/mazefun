@@ -58,9 +58,10 @@ def choose_algorithm():
 
     choice = 0
     while choice not in [1, 2, 3]:
-        choice = int(input("Please Select an Algorithm (1/2/3): "))
-        if choice not in [1, 2, 3]:
+        choice = input("Please Select an Algorithm (1/2/3): ")
+        if choice not in ['1', '2', '3']:
             print("Please enter a valid choice (1/2/3)")
+        choice = int(choice)
     sleep(1)
     print("You have selected " + choice_list[choice - 1])
     return choice
@@ -90,17 +91,25 @@ def learn(choice):
                   "blocks to a list where it will perform the same check and clear process until\n"
                   "the list is empty.")
             print()
+            print("Characteristics:")
+            print("These mazes have sharp corners and more direct lines. The path to reach the end\n"
+                  "should be quite apparent!")
+            print()
             while input("Press Enter to Continue") != '':
                 pass
         elif choice == 2:
             print_bold("Recursive Division")
             sleep(1)
-            print("Recursive division works by recursion - the process of breaking down the big\n"
+            print("This algorithm works by recursion - the process of breaking down the big\n"
                   "problem of generating a maze into a series of much more manageable, smaller\n"
                   "problems. You start with an empty field. You then cut it into two, to get\n"
                   "two smaller chambers. You then cut each of those two into even smaller chambers.\n"
                   "This is done until no more divisions can take place, and what you're left\n"
                   "with is a complete maze!")
+            print()
+            print("Characteristics:")
+            print("As a consequence of the repeated vision, these mazes have long obvious walls\n"
+                  "divding them into distinct chambers. Watch for these as you chart your course!")
             print()
             while input("Press Enter to View An Animation") != '':
                 pass
@@ -114,10 +123,15 @@ def learn(choice):
             print_bold("Recursive Backtracker")
             sleep(1)
             one_at_a_time("Recursive backtracker works like a snake. It begins at a random point and starts\n"
-                  "eating up cells on the grid randomly changing direction, until it hits a dead"
+                  "eating up cells on the grid, randomly changing direction, until it hits a dead\n"
                   "end. Once that happens it traverses back until it finds a cell that does have\n"
                   "neighbours. Rinse and Repeat this process until all cells are visited, and\n"
-                  "you have a Maze!")
+                  "you have a Maze!\n")
+            print()
+            one_at_a_time("Characteristics:\n")
+            one_at_a_time("These mazes are long and winding. Chart your course carefully before you begin\n"
+                          "or you can easily find yourself trapped in a long dead end! Probably the most\n"
+                          "difficult of the three options!\n")
             print()
             while input("Press Enter to Continue") != '':
                 pass
@@ -126,6 +140,8 @@ def learn(choice):
 def choose_difficulty():
     os.system('clear')
     difficulty = 0
+    print("You will now choose a difficulty.")
+    print("We reccommend to start with easy as hard is very challenging.")
     difficulty_list = ["Easy", "Hard"]
     while difficulty not in [1, 2, 3]:
         print_bold("Please choose a difficulty:" )
@@ -134,9 +150,10 @@ def choose_difficulty():
         sleep(0.5)
         print("2.Hard")
         sleep(0.5)
-        difficulty = int(input("(1/2): "))
-        if difficulty not in [1, 2, 3]:
+        difficulty = input("(1/2): ")
+        if difficulty not in ['1', '2']:
             print("Please enter a valid input.")
+        difficulty = int(difficulty)
         sleep(1)
     print("You have seleted: " + difficulty_list[difficulty - 1])
     sleep(1)
@@ -150,7 +167,8 @@ def menu():
     difficulty = choose_difficulty()
     print("Both WASD or the Directional Keypad can be used for movement!\n"
           "Your goal is to move the blue square to the end of the maze while avoiding\n"
-          "the Flying Red Enemy Square.\n"
+          "the Flying Red Enemy Square. The red square only moves while you move, so you\n"
+          "have ample time to consider each move carefully!\n"
           "Goodluck!")
     sleep(1)
     print_bold("Press Enter to Begin the Game")
