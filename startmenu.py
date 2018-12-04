@@ -3,6 +3,7 @@ import sys
 import os
 from ASCII_mazes import maze_animation
 
+
 def print_bold(text):
     print('\033[1m' + text)
     print('\033[0m', end = '')
@@ -61,7 +62,8 @@ def choose_algorithm():
         choice = input("Please Select an Algorithm (1/2/3): ")
         if choice not in ['1', '2', '3']:
             print("Please enter a valid choice (1/2/3)")
-        choice = int(choice)
+        else:
+            choice = int(choice)
     sleep(1)
     print("You have selected " + choice_list[choice - 1])
     return choice
@@ -109,7 +111,7 @@ def learn(choice):
             print()
             print("Characteristics:")
             print("As a consequence of the repeated vision, these mazes have long obvious walls\n"
-                  "divding them into distinct chambers. Watch for these as you chart your course!")
+                  "dividing them into distinct chambers. Watch for these as you chart your course!")
             print()
             while input("Press Enter to View An Animation") != '':
                 pass
@@ -125,8 +127,8 @@ def learn(choice):
             one_at_a_time("Recursive backtracker works like a snake. It begins at a random point and starts\n"
                   "eating up cells on the grid, randomly changing direction, until it hits a dead\n"
                   "end. Once that happens it traverses back until it finds a cell that does have\n"
-                  "neighbours. Rinse and Repeat this process until all cells are visited, and\n"
-                  "you have a Maze!\n")
+                  "neighbours. Repeat this process until all cells are visited, and you are left\n"
+                  "with a complete Maze!\n")
             print()
             one_at_a_time("Characteristics:\n")
             one_at_a_time("These mazes are long and winding. Chart your course carefully before you begin\n"
@@ -141,7 +143,7 @@ def choose_difficulty():
     os.system('clear')
     difficulty = 0
     print("You will now choose a difficulty.")
-    print("We reccommend to start with easy as hard is very challenging.")
+    print("We recommend starting with easy as hard is very challenging.")
     difficulty_list = ["Easy", "Hard"]
     while difficulty not in [1, 2, 3]:
         print_bold("Please choose a difficulty:" )
@@ -153,9 +155,10 @@ def choose_difficulty():
         difficulty = input("(1/2): ")
         if difficulty not in ['1', '2']:
             print("Please enter a valid input.")
-        difficulty = int(difficulty)
+        else:
+            difficulty = int(difficulty)
         sleep(1)
-    print("You have seleted: " + difficulty_list[difficulty - 1])
+    print("You have selected: " + difficulty_list[difficulty - 1])
     sleep(1)
     return difficulty
 
@@ -169,7 +172,7 @@ def menu():
           "Your goal is to move the blue square to the end of the maze while avoiding\n"
           "the Flying Red Enemy Square. The red square only moves while you move, so you\n"
           "have ample time to consider each move carefully!\n"
-          "Goodluck!")
+          "Good Luck!")
     sleep(1)
     print_bold("Press Enter to Begin the Game")
     while input() != '':
