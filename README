@@ -73,5 +73,12 @@ all code is original for MazeFun.
      https://stackoverflow.com/questions/8924173/how-do-i-print-bold-text-in-python
    * The function one_at_a_time used in startmenu.py was based on:
      https://stackoverflow.com/questions/9246076/how-to-print-one-character-at-a-time-on-one-line
+   * The function text_objects used in game.py was from:
+     https: // pythonprogramming.net / displaying - text - pygame - screen /
+   * The function run_maze in  game.py was based on
+     https: // opensource.com / article / 17 / 12 / game - python - moving - player
+   * The algorithm used in simple_generator.py was loosely based off of an explanation of prim's algorithm from
+     http://weblog.jamisbuck.org/2011/1/10/maze-generation-prim-s-algorithm
+
    
      
