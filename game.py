@@ -1,4 +1,5 @@
 import pygame as pg
+from pygame.time import Clock
 from recursive_backtracker import recursive_backtracker
 from simple_generator import simple_generator
 from recursive_division import recursive_division
@@ -184,6 +185,8 @@ def run_maze(generator_type, p_speed, e_speed):
     #   p_speed: speed of the player
     #   e_speed: speed of the enemy
     # Returns: None, opens and runs game
+    clock = Clock()
+    frame_rate = 30
     screen, walls = create_maze(generator_type)
     # Stores copy of maze with no player or enemy as background
     global background
@@ -203,17 +206,23 @@ def run_maze(generator_type, p_speed, e_speed):
                 # Handles player movement
                 screen.blit(background, (0, 0))
                 player.update()
-                if (event.key == pg.K_a or event.key == pg.K_LEFT) and not done_flag: # A or left arrow to move left
-                    movement(screen, player, walls, (-player.speed, 0), (player.speed, 0))
-                if (event.key == pg.K_d or event.key == pg.K_RIGHT) and not done_flag: # D or right arrow to move right
-                    movement(screen,     player, walls, (player.speed, 0), (-player.speed, 0))
-                if (event.key == pg.K_s or event.key == pg.K_DOWN) and not done_flag: # S or down arrow to move down
-                    movement(screen, player, walls, (0, player.speed), (0, -player.speed))
-                if (event.key == pg.K_w or event.key == pg.K_UP) and not done_flag: # W or up arrow to move up
-                    movement(screen, player, walls, (0, -player.speed), (0, player.speed))
+                if not done_flag:
+                    # A or left arrow to move left
+                    if (event.key == pg.K_a or event.key == pg.K_LEFT):
+                        movement(screen, player, walls, (-player.speed, 0), (player.speed, 0))
+                    # D or right arrow to move right
+                    if (event.key == pg.K_d or event.key == pg.K_RIGHT):
+                        movement(screen,     player, walls, (player.speed, 0), (-player.speed, 0))
+                    # S or down arrow to move down
+                    if (event.key == pg.K_s or event.key == pg.K_DOWN):
+                        movement(screen, player, walls, (0, player.speed), (0, -player.speed))
+                    # W or up arrow to move up
+                    if (event.key == pg.K_w or event.key == pg.K_UP):
+                        movement(screen, player, walls, (0, -player.speed), (0, player.speed))
                 if event.key == pg.K_RETURN: # Press enter to quit game
                     running = False
-                done_flag = enemy_function(screen, enemy, player) # Enemy moves, checks end conditions
-            if event.type == pg.QUIT:
+                done_flag = enemy_function(screen, enemy, player) # Enemy moves, checks end game conditions
+            elif event.type == pg.QUIT:
                 running = False
         pg.display.flip()
+        clock.tick(frame_rate)
