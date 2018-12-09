@@ -1,4 +1,5 @@
 import pygame as pg
+from pygame.time import Clock
 from recursive_backtracker import recursive_backtracker
 from simple_generator import simple_generator
 from recursive_division import recursive_division
@@ -123,6 +124,8 @@ def movement(screen, player, walls, desired_movement, bounce_movement):
 
 
 def run_maze(generator_type, p_speed, e_speed):
+    clock = Clock()
+    frame_rate = 60
     screen, walls = create_maze(generator_type)
     global background
     background = screen.copy()
@@ -136,25 +139,23 @@ def run_maze(generator_type, p_speed, e_speed):
             if event.type == pg.VIDEORESIZE:
                 x_size, y_size = event.dict['size'][0], event.dict['size'][1]
                 pg.transform.scale(screen, (x_size, y_size))
-                print (x_size, y_size)
-
             if event.type == pg.KEYDOWN:
                 screen.blit(background, (0, 0))
                 player.update()
-                if (event.key == pg.K_a or event.key == pg.K_LEFT) and not done_flag: # A to move left
-                    movement(screen, player, walls, (-player.speed, 0), (player.speed, 0))
-                if (event.key == pg.K_d or event.key == pg.K_RIGHT) and not done_flag: # D to move right
-                    movement(screen,     player, walls, (player.speed, 0), (-player.speed, 0))
-                if (event.key == pg.K_s or event.key == pg.K_DOWN) and not done_flag: # S to move down
-                    movement(screen, player, walls, (0, player.speed), (0, -player.speed))
-                if (event.key == pg.K_w or event.key == pg.K_UP) and not done_flag: # W to move up
-                    movement(screen, player, walls, (0, -player.speed), (0, player.speed))
+                if not done_flag:
+                    if event.key == pg.K_a or event.key == pg.K_LEFT: # A to move left
+                        movement(screen, player, walls, (-player.speed, 0), (player.speed, 0))
+                    if event.key == pg.K_d or event.key == pg.K_RIGHT: # D to move right
+                        movement(screen,     player, walls, (player.speed, 0), (-player.speed, 0))
+                    if event.key == pg.K_s or event.key == pg.K_DOWN: # S to move down
+                        movement(screen, player, walls, (0, player.speed), (0, -player.speed))
+                    if event.key == pg.K_w or event.key == pg.K_UP: # W to move up
+                        movement(screen, player, walls, (0, -player.speed), (0, player.speed))
                 if event.key == pg.K_RETURN:
                     running = False
                 done_flag = enemy_function(screen, enemy, player)
             if event.type == pg.QUIT:
                 running = False
         pg.display.flip()
-
-
-#run_maze(generator, playerspeed, enemyspeed)
+        clock.tick(frame_rate)
+        print(clock.get_fps())
