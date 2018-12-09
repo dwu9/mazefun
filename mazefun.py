@@ -26,5 +26,5 @@ elif difficulty == 2:
     p_speed = 3
     e_speed = 2
 
-from refactoredgame import run_maze
+from Oldcrap.refactoredgame import run_maze
 run_maze(algorithm, p_speed, e_speed)
