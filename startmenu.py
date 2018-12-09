@@ -1,3 +1,10 @@
+# ----------------------------------------
+# Name: Brendan Coutts and David Wu
+# ID: 1528549 / 1528350
+# CMPUT 274, Fall 2018
+# Final Project: MazeFun
+# ----------------------------------------
+
 from time import sleep
 import sys
 import os
@@ -5,12 +12,23 @@ from ASCII_mazes import maze_animation
 
 
 def print_bold(text):
+    # Function:
+    #   prints something to the terminal in bold font
+    # Arguments:
+    #   text: a string of text to be printed
+    # Returns: None, just prints to the screen
+    # Attribution: https://stackoverflow.com/questions/8924173/how-do-i-print-bold-text-in-python
     print('\033[1m' + text)
     print('\033[0m', end = '')
 
 
-# https://stackoverflow.com/questions/9246076/how-to-print-one-character-at-a-time-on-one-line
 def one_at_a_time(text):
+    # Function:
+    #   Prints something to the terminal one character at a time
+    # Arguments:
+    #   text: a string of text to be printed
+    # Returns: None, just prints to the screen
+    # Attribution: https://stackoverflow.com/questions/9246076/how-to-print-one-character-at-a-time-on-one-line
     for i in text:
         sys.stdout.write(i)
         sys.stdout.flush()
@@ -18,8 +36,13 @@ def one_at_a_time(text):
 
 
 def print_header():
-    # Credit to http://patorjk.com/software/taag/#p=display&f=Doom&t=MazeFun
-    # for the ASCII Art
+    # Function:
+    #   Prints header for the terminal start menu of the game
+    # Arguments:
+    #   None
+    # Returns: None, just prints to the screen
+
+    # Credit to http://patorjk.com/software/taag/#p=display&f=Doom&t=MazeFun for ASCII Art
     title =""" \
       ___  ___             ______
        |  \/  |             |  ___|
@@ -48,6 +71,12 @@ def print_header():
 
 
 def choose_algorithm():
+    # Function:
+    #   Asks the user which algorithm the user would like to have their maze generated with
+    # Arguments:
+    #   None
+    # Returns:
+    #   choice: either 1/2/3 representing each of the generators
     print("The three algorithms are: ")
     sleep(2)
     choice_list = ["Simple Prim's Based Generator", "Recursive Division", "Recursive Backtracker"]
@@ -70,6 +99,13 @@ def choose_algorithm():
 
 
 def learn(choice):
+    # Function:
+    #   Asks the user whether or not they would like to learn about the algorithm that
+    #   they have chosen
+    # Arguments:
+    #   choice: either 1/2/3 representing each of the generators
+    # Returns:
+    #   None, just prints information to the screen
     learn = ''
     sleep(1)
     while learn not in ['y', 'n']:
@@ -140,6 +176,12 @@ def learn(choice):
 
 
 def choose_difficulty():
+    # Function:
+    #   Asks the user which difficulty they would like to play the game at
+    # Arguments:
+    #   None
+    # Returns:
+    #   difficulty: either 1/2 representing either easy or hard difficulty
     os.system('clear')
     difficulty = 0
     print("You will now choose a difficulty.")
@@ -164,6 +206,14 @@ def choose_difficulty():
 
 
 def menu():
+    # Function:
+    #   Runs the terminal based start menu for the game which allows the user to select
+    #   an algorithm, learn about the algorithm, and choose a difficulty
+    # Arguments:
+    #   None
+    # Returns:
+    #   algorithm: either 1/2/3 representing each of the generators
+    #   difficulty: either 1/2 representing either easy or hard difficulty
     print_header()
     algorithm = choose_algorithm()
     learn(algorithm)

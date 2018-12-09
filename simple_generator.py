@@ -1,3 +1,10 @@
+# ----------------------------------------
+# Name: Brendan Coutts and David Wu
+# ID: 1528549 / 1528350
+# CMPUT 274, Fall 2018
+# Final Project: MazeFun
+# ----------------------------------------
+
 import numpy as np
 import random as rand
 import matplotlib.pyplot as pp

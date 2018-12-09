@@ -1,3 +1,10 @@
+# ----------------------------------------
+# Name: Brendan Coutts and David Wu
+# ID: 1528549 / 1528350
+# CMPUT 274, Fall 2018
+# Final Project: MazeFun
+# ----------------------------------------
+
 import numpy as np
 from random import randint, getrandbits
 import matplotlib.pyplot as pyplot
@@ -19,6 +26,7 @@ class Chamber:
         self.max_row = max_row
         self.min_col = min_col
         self.max_col = max_col
+
 
 def orientation(chamber):
     # Function:
@@ -76,6 +84,7 @@ def split(chamber, maze):
         children = derive_children(direction, value, min_row, max_row, min_col, max_col)
         return maze, children
 
+
 def derive_children(direction, value, min_row, max_row, min_col, max_col):
     # Function:
     #   Computes the min/max values of the children chamber objects
@@ -98,6 +107,7 @@ def derive_children(direction, value, min_row, max_row, min_col, max_col):
     children.append(child_1)
     children.append(child_2)
     return children
+
 
 def ex_rand(min, max, parity):
     # Function:
@@ -122,6 +132,7 @@ def ex_rand(min, max, parity):
                 n = randint(min + 1, max - 1)
         return n
 
+
 def in_rand(min, max, parity):
     # Function:
     #   An inclusive random function that computes random even or odd numbers
@@ -139,6 +150,7 @@ def in_rand(min, max, parity):
         while n % 2 == 0:
             n = randint(min, max)
     return n
+
 
 def draw_line(array, direction, value, min, max, gap):
     # Function:
@@ -181,6 +193,7 @@ def derive_first_children(direction, value, size):
     first_children.append(child_2)
     return first_children
 
+
 def create_maze(size):
     # Function:
     #   Creates the array object which represents the maze, and makes the first
@@ -203,6 +216,7 @@ def create_maze(size):
     first_children = derive_first_children(direction, value, size)
     return maze, first_children
 
+
 def draw_maze(maze):
     # Function:
     #   A function which creates a visual representation of the array using
@@ -212,11 +226,11 @@ def draw_maze(maze):
     # Returns:
     #   None, just displays the maze
     # Attribution: https://en.wikipedia.org/wiki/Maze_generation_algorithm
-    #              under the example code
     pyplot.figure(figsize=(10, 10))
     pyplot.imshow(maze, cmap=pyplot.cm.binary, interpolation='nearest')
     pyplot.xticks([]), pyplot.yticks([])
     pyplot.show()
+
 
 def create_boarders(maze):
     # Function:
@@ -233,6 +247,7 @@ def create_boarders(maze):
         for j in range(0, num_cols):
             final_maze[i + 1][j + 1] = maze[i][j]
     return final_maze
+
 
 def recurse(children_list, maze):
     # Function:
@@ -259,6 +274,7 @@ def recurse(children_list, maze):
         maze = np.delete(maze, (0), axis=1)
         maze = create_boarders(maze)
         return maze
+
 
 def recursive_division():
     # Function:

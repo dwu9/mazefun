@@ -1,3 +1,10 @@
+# ----------------------------------------
+# Name: Brendan Coutts and David Wu
+# ID: 1528549 / 1528350
+# CMPUT 274, Fall 2018
+# Final Project: MazeFun
+# ----------------------------------------
+
 import pygame as pg
 from pygame.time import Clock
 from recursive_backtracker import recursive_backtracker
