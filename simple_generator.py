@@ -23,10 +23,14 @@ def create_maze(size):
 
 
 def draw_maze(maze):
-    # Function: Draws maze from matrix using pyplot, used for testing algorithm; True is black, False is white
+    # Function:
+    #   A function which creates a visual representation of the array using
+    #   the pyplot module
     # Arguments:
-    #   maze: Two dimensional matrix of trues and falses
-    # Returns: None, draws maze
+    #   maze: the numpy array of boolean Trues and Falses
+    # Returns:
+    #   None, just displays the maze
+    # Attribution: https://en.wikipedia.org/wiki/Maze_generation_algorithm
     pp.figure(figsize=(10, 10))
     pp.imshow(maze, cmap=pp.cm.binary, interpolation='nearest')
     pp.xticks([]), pp.yticks([])
@@ -66,8 +70,9 @@ def nearby_blocks(start_row, start_column):
 
 
 def frontier_prep(maze, frontier_list, checked_list, direction):
-    # Function: Checks if a block is already queued to be checked or has already  been checked
-    #           appends to frontier_list if otherwise
+    # Function:
+    #   Checks if a block is already queued to be checked or has already  been checked
+    #   appends to frontier_list if otherwise
     # Arguments:
     #   frontier_list: List of matrix indices that should be checked
     #   checked_list: list of matrix indices that have already been checked
