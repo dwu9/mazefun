@@ -48,7 +48,7 @@ then learn about the algorithm, and finally play a game based on that algorithm.
 
 Inspired by a Pac-Man style game we applied our knowledge from the PVG MOOC to create
 a Pygame based maze solving game where the user will be challenged by a flying
-enemy to work their way safely from the begining of the maze to the end. While playing
+enemy to work their way safely from the beginning of the maze to the end. While playing
 the user is encouraged to watch for characteristics of the particular algorithm that
 they had chosen, as these attributes allow the user to chart a more efficient course
 through the maze, ultimately improving their chances of success.
