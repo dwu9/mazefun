@@ -18,18 +18,60 @@ Accessories:
     None
 
 Instructions:
-Run the game from the command line, changing to the correct directory and
+Run the game from the command line, navigating to the correct directory and
 entering <python3 mazefun.py> in the terminal. You can skip the intro text
 with optional command line arguments <python3 mazefun.py "algorithm", "difficulty">
 Replace "algorithm" with a number from 1 to 3, 1 representing the Prim's based
 algorithm, 2 representing Recursive Division and 3 representing Recursive Backtracker.
 Replace "difficulty" with either 1 or 2 representing easy and hard respectively.
 As stated in the menu, Hard is extremely challenging so we recommend that all users
-begin with the Easy difficulty.
+begin with the Easy difficulty. If invalid command line arguments are provided
+the program will automatically enter the start menu.
+
+Controls:
+Both WASD or the Directional Keypad can be used for movement.
+Your goal is to move the blue square to the end of the maze while avoiding
+the Flying Red Enemy Square. The red square only moves while you move, so you
+have ample time to consider each move carefully.
 
 Purpose: 
 An educational game that uses one of three maze generation algorithms to create
-a playable maze. 
+a playable maze.
+
+Code Attributions
+Attributions can be found in specific location in the files where code was borrowed
+from other sources. These instances are also listed below. Apart from these specific
+instances all code is original for MazeFun.
+   * The draw_maze function which was used in each of the generators during testing
+     to visualize the mazes was sourced from sample code on the Wikipedia page for
+     Maze Generation: https://en.wikipedia.org/wiki/Maze_generation_algorithm
+     This code is not utilized in the final version of MazeFun. It was only used
+     in the development process
+   * The ASCII Art used in the title of the menu was sourced from the following:
+     http://patorjk.com/software/taag/#p=display&f=Doom&t=MazeFun
+   * The function print_bold used in startmenu.py was based on:
+     https://stackoverflow.com/questions/8924173/how-do-i-print-bold-text-in-python
+   * The function one_at_a_time used in startmenu.py was based on:
+     https://stackoverflow.com/questions/9246076/how-to-print-one-character-at-a-time-on-one-line
+   * The function text_objects used in game.py was from:
+     https: // pythonprogramming.net / displaying - text - pygame - screen /
+   * The function run_maze in  game.py was based on
+     https: // opensource.com / article / 17 / 12 / game - python - moving - player
+
+Citations:
+The following pages were used in researching various maze generation algorithms
+    The recursive division and recursive backtracker algorithms were based off of the
+    explanations in:
+    * https://en.wikipedia.org/wiki/Maze_generation_algorithm
+    The algorithm used in simple_generator.py was loosely based off of an explanation
+    of Prim's algorithm from:
+    * http://weblog.jamisbuck.org/2011/1/10/maze-generation-prim-s-algorithm
+    Information about the Pygame module was found both in the Pygame Documentation:
+    as well as from the PVG MOOC which can be found at the following:
+    * https://www.pygame.org/docs/
+    * https://www.coursera.org/learn/problem-solving-programming-video-games
+    The font file FreeSansBold.ttf was obtained from:
+    * https://fonts2u.com/free-sans-bold.font
 
 Process:
 Our intention from the start was to create a program that used mazes. We thought it
@@ -53,32 +95,8 @@ the user is encouraged to watch for characteristics of the particular algorithm 
 they had chosen, as these attributes allow the user to chart a more efficient course
 through the maze, ultimately improving their chances of success.
 
-Citations:
-The following pages were used in researching various maze generation algorithms:
-    * https://en.wikipedia.org/wiki/Maze_generation_algorithm
-    * http://weblog.jamisbuck.org/2011/1/12/maze-generation-recursive-division-algorithm
-    * https://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
-
-Attributions can be found in specific location in the files where code was borrowed
-from other sources. These instances are also listed below. Apart from these locations
-all code is original for MazeFun.
-   * The draw_maze function which was used in each of the generators during testing
-     to visualize the mazes was sourced from sample code on the Wikipedia page for 
-     Maze Generation: https://en.wikipedia.org/wiki/Maze_generation_algorithm
-     This code is not utilized in the final version of MazeFun. It was only used
-     in the development process
-   * The ASCII Art used in the title of the menu was sourced from the following:
-     http://patorjk.com/software/taag/#p=display&f=Doom&t=MazeFun
-   * The function print_bold used in startmenu.py was based on:
-     https://stackoverflow.com/questions/8924173/how-do-i-print-bold-text-in-python
-   * The function one_at_a_time used in startmenu.py was based on:
-     https://stackoverflow.com/questions/9246076/how-to-print-one-character-at-a-time-on-one-line
-   * The function text_objects used in game.py was from:
-     https: // pythonprogramming.net / displaying - text - pygame - screen /
-   * The function run_maze in  game.py was based on
-     https: // opensource.com / article / 17 / 12 / game - python - moving - player
-   * The algorithm used in simple_generator.py was loosely based off of an explanation of prim's algorithm from
-     http://weblog.jamisbuck.org/2011/1/10/maze-generation-prim-s-algorithm
-
-   
-     
+Notes and Assumptions:
+The start menu assumes that it will be running on a UNIX operating system, either LINUX
+or MAC OS. Some of the functionality will be lost because the program uses UNIX commands
+to clear the terminal screen. However, the game itself still should run fine on a windows
+machine as that is simply Python based.
