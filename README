@@ -1,21 +1,5 @@
-Name: Brendan Coutts and David Wu
-ID: 1528549 / 1528350
-CMPUT 274 Fa18
-Final Project: MazeFun
-
-Included Files:
-    * mazefun.py
-    * game.py
-    * simple_generator.py
-    * recursive_division.py
-    * recursive_backtracker.py
-    * startmenu.py
-    * ASCII_mazes.py
-    * FreeSansBold.ttf
-    * README
-
-Accessories:
-    None
+Mazefun!
+By Brendan Coutts and David Wu
 
 Instructions:
 Run the game from the command line, navigating to the correct directory and
